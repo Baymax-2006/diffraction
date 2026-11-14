@@ -1,0 +1,133 @@
+/* submit.css — 精简提交页。不加载 styles.css，避免带上完整版的交互控件样式。 */
+:root {
+  color-scheme: dark;
+  --bg: #070d18;
+  --panel: #101b2c;
+  --panel2: #16243a;
+  --line: #26384f;
+  --text: #eaf4ff;
+  --muted: #93aac2;
+  --cyan: #57dbe8;
+  --pink: #ee79aa;
+  --amber: #ffc074;
+  --green: #74e3a8;
+  --shadow: 0 10px 28px rgba(0, 0, 0, .28);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background:
+    radial-gradient(circle at 10% -10%, #1b3a58 0, transparent 36rem),
+    var(--bg);
+  color: var(--text);
+  font: 15.5px/1.65 "Segoe UI", "Microsoft YaHei", "WenQuanYi Micro Hei", "Noto Sans CJK SC", sans-serif;
+}
+a { color: var(--cyan); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: #b8f6ff; }
+code { font-family: Consolas, "WenQuanYi Micro Hei Mono", ui-monospace, monospace; font-size: .92em; color: #d7ecff; }
+
+.wrap { max-width: 1360px; margin: 0 auto; padding: 28px 18px 64px; }
+.boot {
+  margin: 0 auto 14px; max-width: 1180px; padding: 10px 14px;
+  background: #14283c; border: 1px solid var(--line); border-radius: 10px; color: var(--amber);
+}
+.boot[hidden] { display: none; }
+
+.hero { display: flex; justify-content: space-between; gap: 24px; align-items: flex-end; margin-bottom: 18px; }
+.eyebrow { color: var(--cyan); letter-spacing: .08em; font-size: 12px; text-transform: none; margin: 0 0 6px; }
+h1 { font-size: 30px; line-height: 1.25; margin: 0 0 8px; font-weight: 680; }
+.lead { margin: 0; color: var(--muted); max-width: 46rem; }
+.actions { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+button, .ghost {
+  font: inherit; color: var(--text); background: #1a3148; border: 1px solid #3a6280;
+  border-radius: 10px; padding: 8px 14px; cursor: pointer;
+}
+button:hover:not(:disabled), .ghost:hover { border-color: var(--cyan); color: white; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+#btnExport { background: #245066; border-color: var(--cyan); color: white; font-weight: 650; }
+.ghost { text-decoration: none; display: inline-block; }
+
+.statusrow { display: flex; gap: 12px; align-items: center; margin: 8px 0 18px; }
+#status { flex: 1; color: var(--muted); font-size: 13.5px; min-height: 1.4em; }
+.bar { width: 180px; height: 8px; border-radius: 99px; background: #0c1726; border: 1px solid var(--line); overflow: hidden; flex-shrink: 0; }
+.bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--cyan), #8cf0c2); transition: width .25s ease; }
+
+section { margin: 28px 0 8px; }
+h2 { font-size: 22px; margin: 0 0 10px; padding-top: 8px; border-top: 1px solid var(--line); }
+h3 { font-size: 16px; margin: 0 0 6px; }
+p { margin: 0 0 10px; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; color: var(--muted); }
+
+.formula {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 14px; margin: 10px 0 14px; overflow-x: auto;
+}
+.formula b { font-weight: 650; color: #fff; letter-spacing: .01em; }
+.formula > span { display: block; color: var(--muted); margin-top: 4px; }
+
+.coords {
+  display: grid; grid-template-columns: 220px 1fr; gap: 14px; align-items: center;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin: 10px 0 14px;
+}
+.coords svg { width: 100%; height: auto; }
+.coords p { margin: 0; }
+
+.card, .plotcard, .tablecard {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  box-shadow: var(--shadow); padding: 12px 12px 10px; margin: 12px 0;
+}
+.plotcard header, .tablecard header, .card > header { margin-bottom: 8px; }
+.plotcard header p, .tablecard header p, .card > header p { margin: 0; }
+
+canvas { display: block; width: 100%; background: #060c16; border-radius: 8px; }
+#cAxial { height: 440px; }
+#cR4 { height: 300px; }
+
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
+.metric { background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.metric.hl { border-color: #8a6840; background: #2a2118; }
+.metric small { display: block; color: var(--muted); font-size: 12px; line-height: 1.35; }
+.metric strong { display: block; font-size: 22px; font-variant-numeric: tabular-nums; letter-spacing: -.02em; margin-top: 2px; }
+.metric em { display: block; font-style: normal; color: var(--amber); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13.5px; }
+th, td { text-align: right; padding: 5px 8px; border-bottom: 1px solid #1e3046; white-space: nowrap; }
+th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; }
+tr.hl td { background: rgba(255, 192, 116, .14); color: #ffe7c4; font-weight: 700; }
+.pass { color: var(--green); }
+.fail { color: var(--pink); }
+
+.maps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; align-items: start; }
+.mapcard { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px; box-shadow: var(--shadow); }
+.mapcard h3 { font-size: 15px; }
+.mapcv { aspect-ratio: 1.08 / 1; height: auto; }
+.mapcard p { font-size: 13.5px; line-height: 1.55; margin: 8px 0 0; }
+
+.checks { list-style: none; padding: 0; margin: 8px 0 0; }
+.checks li { padding: 3px 0; font-variant-numeric: tabular-nums; font-size: 13.5px; }
+footer { margin-top: 28px; color: var(--muted); font-size: 12.5px; }
+
+@media (max-width: 1100px) {
+  .maps { grid-template-columns: 1fr 1fr; }
+  h1 { font-size: 26px; }
+}
+@media (max-width: 720px) {
+  .wrap { padding: 16px 12px 48px; }
+  .hero, .coords, .metrics { grid-template-columns: 1fr; display: grid; }
+  .hero { align-items: stretch; }
+  .actions { justify-content: flex-start; }
+  .statusrow { flex-direction: column; align-items: stretch; }
+  .bar { width: 100%; }
+  #cAxial { height: 300px; }
+  #cR4 { height: 240px; }
+  .metric strong { font-size: 18px; }
+}
+@media (max-width: 520px) {
+  .maps { grid-template-columns: 1fr; }
+  h1 { font-size: 22px; }
+  h2 { font-size: 19px; }
+  body { font-size: 14.5px; }
+}

@@ -1,0 +1,248 @@
+{
+  "schema": "circular-aperture-lab/phase2-config",
+  "kernelVersion": "phase2-2026-11-11",
+  "exportedAt": "2026-11-11T14:29:54.239Z",
+  "isProblemPreset": true,
+  "appliedJob": 27,
+  "params": {
+    "lambda_nm": 500,
+    "L_cm": 50,
+    "A": 1,
+    "rMax_mm": 2.2,
+    "r_mm": 1.322876803474044,
+    "r4Threshold": 0.05,
+    "lockedToFourthMax": true
+  },
+  "unappliedEdits": null,
+  "precision": {
+    "key": "standard",
+    "label": "标准",
+    "pathFrac": 20,
+    "gl": 8,
+    "nr": 4000,
+    "rPhaseStep": 0.15707963267948966,
+    "nrCap": 200000,
+    "refineBudget": null
+  },
+  "quadrature": {
+    "panelWidth_m": 0.000005681873181551985,
+    "panelWidth_um": 5.681873181551985,
+    "glNodesPerPanel": 8,
+    "pathFrac": 20,
+    "pathPerPanel_nm": 25,
+    "pathPerNode_nm": 4.585866062391244,
+    "panels": 389,
+    "nr": 4000
+  },
+  "conventions": {
+    "timeFactor": "exp(-i ω t)",
+    "propagator": "(1/(iλ)) (z/R) exp(ikR)/R, RS1",
+    "areaWeight": "2πρ dρ (轴上)",
+    "intensity": "I = |U|^2",
+    "normalization": "I_inc = |A|^2 = 1；I/I_inc = I/I_0",
+    "coordinates": "+z 光传播；孔面 (X,Y)、观察屏 (X′,Y′)，+X、+X′ 向上，右手系",
+    "units": "内部 SI 米；显示 nm/μm/mm/cm"
+  },
+  "view": {
+    "xAxis": "r",
+    "showExtrema": true,
+    "showR4": true,
+    "showAnalyticCheck": false,
+    "showR4Band": true,
+    "mainView": {
+      "x0": 0,
+      "x1": 2.2,
+      "y0": 0,
+      "y1": 4.4
+    }
+  },
+  "results": {
+    "job": 27,
+    "precision": "standard",
+    "quality": "final",
+    "fourthMax": {
+      "r_mm": 1.322876803474044,
+      "I_over_Iinc": 3.9999860000610483,
+      "NF": 7.000012148678817
+    },
+    "r4": {
+      "C_per_m4": 157913670417142.12,
+      "rLimit_mm": 0.24954389572203178,
+      "NFLimit": 0.24908862356851302,
+      "threshold": 0.05
+    },
+    "extrema": [
+      {
+        "kind": "max",
+        "index": 1,
+        "r_mm": 0.5000000371697028,
+        "I_over_Iinc": 3.9999980000010495,
+        "NF": 1.0000001486788164,
+        "n": 1
+      },
+      {
+        "kind": "min",
+        "index": 1,
+        "r_mm": 0.7071069579632029,
+        "I_over_Iinc": 9.999979990798363e-13,
+        "NF": 2.0000009999998984,
+        "n": 2
+      },
+      {
+        "kind": "max",
+        "index": 2,
+        "r_mm": 0.8660257139194565,
+        "I_over_Iinc": 3.9999940000110534,
+        "NF": 3.000002148678817,
+        "n": 3
+      },
+      {
+        "kind": "min",
+        "index": 2,
+        "r_mm": 1.0000004999998497,
+        "I_over_Iinc": 3.999983996244129e-12,
+        "NF": 4.000003999999797,
+        "n": 4
+      },
+      {
+        "kind": "max",
+        "index": 3,
+        "r_mm": 1.1180346761928737,
+        "I_over_Iinc": 3.999990000031054,
+        "NF": 5.000006148678816,
+        "n": 5
+      },
+      {
+        "kind": "min",
+        "index": 3,
+        "r_mm": 1.2247457899498673,
+        "I_over_Iinc": 8.99994600580088e-12,
+        "NF": 6.000008999999696,
+        "n": 6
+      },
+      {
+        "kind": "max",
+        "index": 4,
+        "r_mm": 1.322876803474044,
+        "I_over_Iinc": 3.9999860000610483,
+        "NF": 7.000012148678817,
+        "n": 7
+      },
+      {
+        "kind": "min",
+        "index": 4,
+        "r_mm": 1.4142149765859144,
+        "I_over_Iinc": 1.5999872014487393e-11,
+        "NF": 8.000015999999594,
+        "n": 8
+      },
+      {
+        "kind": "max",
+        "index": 5,
+        "r_mm": 1.5000016790556288,
+        "I_over_Iinc": 3.9999820001010615,
+        "NF": 9.000020148678821,
+        "n": 9
+      },
+      {
+        "kind": "min",
+        "index": 5,
+        "r_mm": 1.581140806506452,
+        "I_over_Iinc": 2.4999750019520553e-11,
+        "NF": 10.000024999999493,
+        "n": 10
+      },
+      {
+        "kind": "max",
+        "index": 6,
+        "r_mm": 1.6583146677183147,
+        "I_over_Iinc": 3.9999780001510605,
+        "NF": 11.000030148678817,
+        "n": 11
+      },
+      {
+        "kind": "min",
+        "index": 6,
+        "r_mm": 1.7320534056430965,
+        "I_over_Iinc": 3.599956798924302e-11,
+        "NF": 12.000035999999394,
+        "n": 12
+      },
+      {
+        "kind": "max",
+        "index": 7,
+        "r_mm": 1.802778560214677,
+        "I_over_Iinc": 3.9999740002110356,
+        "NF": 13.000042148678814,
+        "n": 13
+      },
+      {
+        "kind": "min",
+        "index": 7,
+        "r_mm": 1.8708319673342722,
+        "I_over_Iinc": 4.899931407464858e-11,
+        "NF": 14.000048999999292,
+        "n": 14
+      },
+      {
+        "kind": "max",
+        "index": 8,
+        "r_mm": 1.93649529748195,
+        "I_over_Iinc": 3.999970000281047,
+        "NF": 15.000056148678821,
+        "n": 15
+      },
+      {
+        "kind": "min",
+        "index": 8,
+        "r_mm": 2.0000039999959496,
+        "I_over_Iinc": 6.399897591631524e-11,
+        "NF": 16.00006399999919,
+        "n": 16
+      },
+      {
+        "kind": "max",
+        "index": 9,
+        "r_mm": 2.061557187460417,
+        "I_over_Iinc": 3.9999660003611015,
+        "NF": 17.00007214867882,
+        "n": 17
+      },
+      {
+        "kind": "min",
+        "index": 9,
+        "r_mm": 2.1213251165249924,
+        "I_over_Iinc": 8.099854187928472e-11,
+        "NF": 18.000080999999092,
+        "n": 18
+      },
+      {
+        "kind": "max",
+        "index": 10,
+        "r_mm": 2.179454642145531,
+        "I_over_Iinc": 3.999962000451016,
+        "NF": 19.000090148678815,
+        "n": 19
+      }
+    ],
+    "currentPoint": {
+      "r_mm": 1.322876803474044,
+      "I_over_Iinc": 3.9999860000610483,
+      "quality": "precise"
+    }
+  },
+  "q2": {
+    "caseKey": "inphase",
+    "seed": 20261111,
+    "cellSize_um": 40,
+    "precision": "standard",
+    "scale": "linear",
+    "norm": "shared",
+    "logFloor": 0.0001,
+    "probeX_mm": 0,
+    "probeY_mm": 0,
+    "halfWidth_mm": 2.5,
+    "applied": null
+  },
+  "reproduce": "用“载入配置 JSON”导入本文件，或在 Node 中：require(\"./diffraction.js\").computeQ1(params, precision.key)；二维：require(\"./diffraction-q2.js\").computeQ2(...)"
+}

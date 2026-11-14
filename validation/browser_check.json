@@ -1,0 +1,120 @@
+{
+  "when": "2026-11-11T14:29:57.906Z",
+  "browser": "Chrome headless 156, 1400×900",
+  "note": "阶段1常规交互检查（修复轮回归见 regression_fix1.json）",
+  "checks": [
+    {
+      "name": "页面启动且显示精确结果",
+      "pass": true,
+      "detail": "精确结果 · 标准 / 初始化完成（19 ms）"
+    },
+    {
+      "name": "计算在 Web Worker 中运行",
+      "pass": true,
+      "detail": "Web Worker 后台线程"
+    },
+    {
+      "name": "默认锁定第 4 极大（数值求得）",
+      "pass": true,
+      "detail": "r = 1.322876803474044 mm, I = 3.9999860000610483"
+    },
+    {
+      "name": "极值 ≥ 10 个且 ≥ 5 个完整周期",
+      "pass": true,
+      "detail": "19 个极值"
+    },
+    {
+      "name": "拖动时游标/数值同步（预览）",
+      "pass": true,
+      "detail": "{\"quality\":\"preview\",\"r\":0.9,\"metric\":\"0.900000 mm\",\"input\":\"0.9000000\",\"locked\":false}"
+    },
+    {
+      "name": "拖动期间主线程不卡顿（最大帧间隔 < 100 ms）",
+      "pass": true,
+      "detail": "max frame 25.3 ms，61 次 input"
+    },
+    {
+      "name": "拖动解除锁定",
+      "pass": true
+    },
+    {
+      "name": "松开后得到精确直接积分值",
+      "pass": true,
+      "detail": "I(0.9 mm) = 3.457942940816128"
+    },
+    {
+      "name": "数值框精确输入 r = 0.2 mm，判定在 r⁴ 区内",
+      "pass": true,
+      "detail": "r⁴ 适用区内：ε = 2.088 % ≤ 5.00 %"
+    },
+    {
+      "name": "r⁴ 阈值可调：1 % ⇒ r ≤ 0.1662 mm",
+      "pass": true,
+      "detail": "判据 ε(r) = |I/(C r⁴) − 1| ≤ 1.00 % ⇒ r ≤ 0.16620 mm（N_F ≤ 0.1105，二分精化）C = I(r_s)/r_s⁴ = 1.5"
+    },
+    {
+      "name": "5 % ⇒ r ≤ 0.2495 mm",
+      "pass": true,
+      "detail": "判据 ε(r) = |I/(C r⁴) − 1| ≤ 5.00 % ⇒ r ≤ 0.24954 mm（N_F ≤ 0.2491，二分精化）C = I(r_s)/r_s⁴ = 1.5"
+    },
+    {
+      "name": "“锁定第 4 极大半径”按钮",
+      "pass": true,
+      "detail": "第 4 个极大：r = 1.3228768 mm（任务 #1 的数值曲线检测、Brent 求根精化）。已锁定：参数变化后自动跟随。"
+    },
+    {
+      "name": "点击极值标记跳到该半径",
+      "pass": true,
+      "detail": "极小3 r = 1.2247458 mm"
+    },
+    {
+      "name": "悬停读数存在",
+      "pass": true
+    },
+    {
+      "name": "快速连续改 λ：只接受最新任务",
+      "pass": true,
+      "detail": "最终 λ = 500 nm，取代 / 丢弃过期任务 3 个，被接受的 q1 任务 [13]，显示 #13"
+    },
+    {
+      "name": "偏离题目预设时显著提示",
+      "pass": true,
+      "detail": "⚠ 扩展参数 · λ = 500 nm · L = 80 cm；L=80 cm 时 r₄ = 1.6733210 mm"
+    },
+    {
+      "name": "恢复题目预设",
+      "pass": true,
+      "detail": "题目预设 · λ = 500 nm · L = 50 cm，r = 1.322876803474044"
+    },
+    {
+      "name": "切换到高精",
+      "pass": true,
+      "detail": "图形与数值对应（已应用）：λ = 500 nm · L = 50 cm · r_max = 2.2 mm · 高精（h = 2.841 μm，GL 12，N_r = 16000）· 任务 #19"
+    },
+    {
+      "name": "取消按钮：取消后保留上一次结果",
+      "pass": true,
+      "detail": "已取消；显示的是上一次完成的结果（任务 #21）"
+    },
+    {
+      "name": "界面内收敛检查完成",
+      "pass": true,
+      "detail": "完成（任务 #28，1469 ms）"
+    },
+    {
+      "name": "导出 CSV / 极值 CSV / JSON / PNG",
+      "pass": true,
+      "detail": "圆孔衍射_参数配置_20261111-062954.json | 圆孔轴上光强I(r)_λ500nm_L50cm_标准_20261111-062954.csv | 圆孔轴上光强_图像_λ500nm_L50cm_20261111-062954.png | 圆孔轴上光强_提交图_极值半径_λ500nm_L50cm_20261111-062954.png | 圆孔轴上光强_极值表_20261111-062954.csv"
+    },
+    {
+      "name": "控制台无错误",
+      "pass": true,
+      "detail": "无"
+    },
+    {
+      "name": "file:// 双击打开也能运行（主线程回退）",
+      "pass": true,
+      "detail": "Web Worker 后台线程（file:// 内联 Blob）；r₄ = 1.3228768 mm"
+    }
+  ]
+}

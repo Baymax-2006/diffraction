@@ -1,0 +1,152 @@
+{
+  "when": "2026-11-12T03:42:55.742Z",
+  "node": "v22.23.4",
+  "kernel": "review-2026-11-12",
+  "checks": [
+    {
+      "group": "基准",
+      "name": "第 4 极大 r = 1.3228768035 mm（10 位）",
+      "pass": true,
+      "detail": "1.322876803474"
+    },
+    {
+      "group": "基准",
+      "name": "第 4 极大 I/I_inc = 3.999986（6 位）",
+      "pass": true,
+      "detail": "3.999986000"
+    },
+    {
+      "group": "基准",
+      "name": "5% r⁴ 边界 = 0.2495438957 mm（10 位）",
+      "pass": true,
+      "detail": "0.249543895722"
+    },
+    {
+      "group": "基准",
+      "name": "0–2.2 mm：10 极大 / 9 极小",
+      "pass": true,
+      "detail": "10/9"
+    },
+    {
+      "group": "基准",
+      "name": "题目预设下半径采样点数不变（N_r = 4000），结果与修复前逐位一致",
+      "pass": true,
+      "detail": "N_r = 4000，边缘相位步 0.03042 rad ≤ π/20"
+    },
+    {
+      "group": "基准",
+      "name": "预览档 r₄ 与标准档一致（< 0.01 nm）",
+      "pass": true,
+      "detail": "1.3228768035 mm，N_r = 800"
+    },
+    {
+      "group": "基准",
+      "name": "高精档 r₄ 与标准档一致（< 0.01 nm）",
+      "pass": true,
+      "detail": "1.3228768035 mm，N_r = 16000"
+    },
+    {
+      "group": "问题5",
+      "name": "预期极大数 ⌊(N_F,max+1)/2⌋ = 474（N_F,max = 947.37）",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "group": "问题5",
+      "name": "预览档不再混叠（原 800 点只检出 181 个）",
+      "pass": true,
+      "detail": "预览 473 个极大，N_r = 7567，ΔN_F = 0.2504，parabolic，7 ms"
+    },
+    {
+      "group": "问题5",
+      "name": "标准档 473 个极大",
+      "pass": true,
+      "detail": "N_r = 37828，ΔN_F = 0.0501，21 ms"
+    },
+    {
+      "group": "问题6",
+      "name": "前缀和精化：λ=380 nm、L=10 cm、r_max=6 mm 的 946 个极值远小于 1 s，且与从 0 重积分的位置一致",
+      "pass": true,
+      "detail": {
+        "ms": 21,
+        "analysis": 7,
+        "n": 946
+      }
+    },
+    {
+      "group": "问题6",
+      "name": "题目预设：前缀 fieldAt 与从 0 重积分的极值位置差 < 1e-15 m",
+      "pass": true,
+      "detail": {
+        "n": 19,
+        "maxDr_m": 4.336808689942018e-19
+      }
+    },
+    {
+      "group": "问题5 输入",
+      "name": "jobs.js 入口拒绝 λ=1 nm 与 λ=-5、L=0",
+      "pass": true,
+      "detail": "error:Error: 参数超出合法范围：λ ∈ [100, 2000] nm | error:Error: 参数超出合法范围：λ ∈ [100, 2000] nm；L ∈ [1, 1000] cm"
+    },
+    {
+      "group": "问题5",
+      "name": "预览档极大位置与标准档逐一对应，偏差 < 半径采样间隔",
+      "pass": true,
+      "detail": "max |Δr| = 7.9 nm，预览 Δr = 793.0 nm"
+    },
+    {
+      "group": "问题5",
+      "name": "源平面积分采样（makeQuad）与半径扫描采样（radiusSampling）互不影响",
+      "pass": true,
+      "detail": "h = 0.6345 μm，N_r = 7567"
+    },
+    {
+      "group": "问题5",
+      "name": "预览档：相邻半径采样边缘相位步 ≤ 上限",
+      "pass": true,
+      "detail": "0.7853 ≤ 0.7854 rad，每周期 8.0 点"
+    },
+    {
+      "group": "问题5",
+      "name": "标准档：相邻半径采样边缘相位步 ≤ 上限",
+      "pass": true,
+      "detail": "0.1571 ≤ 0.1571 rad，每周期 40.0 点"
+    },
+    {
+      "group": "问题5",
+      "name": "高精档：相邻半径采样边缘相位步 ≤ 上限",
+      "pass": true,
+      "detail": "0.0393 ≤ 0.0393 rad，每周期 160.0 点"
+    },
+    {
+      "group": "问题3",
+      "name": "convergenceStudy 在 r_max = 0.3 mm（无极大）下不抛异常",
+      "pass": true,
+      "detail": "{\"pathFrac\":160,\"gl\":16,\"h_um\":5.20833427083325,\"r4max_mm\":null,\"I4\":null,\"nExtrema\":0,\"nMaxima\":0,\"targetIndex\":null,\"hasFourth\":false}"
+    },
+    {
+      "group": "问题3",
+      "name": "r_max = 1.2 mm（3 个极大）：收敛检查退而检查最后一个极大",
+      "pass": true,
+      "detail": "{\"target\":3,\"nMax\":3}"
+    },
+    {
+      "group": "问题3",
+      "name": "经 jobs.js 运行 conv 任务：返回结果而不是 error",
+      "pass": true,
+      "detail": "conv"
+    },
+    {
+      "group": "问题3",
+      "name": "computeQ1(r_max = 0.3)：fourthMax = null，r⁴ 边界仍正确",
+      "pass": true,
+      "detail": "extrema 0，r_lim = 0.2495438957 mm"
+    },
+    {
+      "group": "问题4",
+      "name": "失败注入：jobs.js 回传 {type:\"error\", id, job:\"q1\"}",
+      "pass": true,
+      "detail": "Error: 模拟计算失败（回归测试注入）"
+    }
+  ]
+}

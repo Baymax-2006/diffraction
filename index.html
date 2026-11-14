@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>圆孔衍射 · 轴上光强与二维图样数值实验（第13章研讨题 第1题）</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- 启动自检：任何脚本错误都直接显示出来，而不是留下一片黑屏 -->
+<script>
+window.__BOOT = { t0: performance.now(), build: '2026-11-11 阶段2 · 交互轮' };
+window.addEventListener('error', function (e) {
+  var b = document.getElementById('boot'); if (!b) return;
+  b.className = 'boot err';
+  b.textContent = '页面出错了 —— 请把这一行发给开发者：\n' + e.message + '\n位置: ' + (e.filename || '') + ' 第 ' + e.lineno + ' 行   构建: ' + window.__BOOT.build;
+});
+</script>
+<div id="boot" class="boot">正在初始化…（构建 2026-11-11 阶段2 · 交互轮）</div>
+
+<main class="app">
+<header class="hero">
+  <div>
+    <div class="eyebrow">物理光学 · 第13章研讨题 · 第1题</div>
+    <h1>圆孔轴上光强：半波带一圈圈加进来，I(r) 就起伏</h1>
+    <p>λ = 500 nm 的单色平面波垂直照射半径为 r 的圆孔，观察屏在 L = 50 cm 处。对孔面每个面元发出的球面子波做<strong>复振幅数值积分</strong>，再取 I = |U|²，得到轴上点 O′ 的光强随半径的变化。</p>
+    <div class="thesis">主线：<b>小孔时所有子波几乎同相 → U ∝ 面积 ∝ r²，I ∝ r⁴；孔变大后边缘子波的光程差达到 λ/2 的整数倍 → 相量绕圈 → I(r) 在 r² 上近似等间隔地振荡。</b></div>
+  </div>
+  <div class="hero-side">
+    <div class="preset-chip" id="presetChip">题目预设 · λ = 500 nm · L = 50 cm</div>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="页面">
+  <button id="tab-q1" role="tab" aria-selected="true" aria-controls="q1-panel">第一问 · 轴上光强 I(r)</button>
+  <button id="tab-q2" role="tab" aria-selected="false" aria-controls="q2-panel">第二问 · 四种二维图样</button>
+</nav>
+
+<!-- ===================== 第一问 ===================== -->
+<div class="workspace" id="q1-panel">
+  <div class="maincol">
+    <div class="metrics">
+      <div class="metric"><small>当前半径 r</small><strong id="mR">—</strong><em id="mRs">r² = —</em></div>
+      <div class="metric"><small>菲涅耳数 N<sub>F</sub> = r²/(λL)</small><strong id="mNF">—</strong><em id="mNFs">≈ 孔内半波带数</em></div>
+      <div class="metric"><small>轴上光强 I/I<sub>inc</sub>（数值积分）</small><strong id="mI">—</strong><em id="mIs">—</em></div>
+      <div class="metric hl"><small>第 4 个极大半径 r<sub>4,max</sub>（本项目数值求得）</small><strong id="m4">—</strong><em id="m4s">计算中…</em></div>
+    </div>
+
+    <section class="concept" aria-live="polite">
+      <span class="badge" id="cBadge">状态</span>
+      <h2 id="cTitle">正在计算…</h2>
+      <p id="cText"></p>
+    </section>
+
+    <div class="statusbar" id="statusbar">
+      <span class="qbadge" id="qBadge">—</span>
+      <span class="stag" id="sTag">—</span>
+      <div class="progress"><i id="progBar"></i></div>
+      <span class="stext" id="sText">—</span>
+      <span class="mainwarn warntxt" hidden>⚠ 主线程计算：计算期间页面会停顿</span>
+      <button class="btn-ghost" id="btnCancel" disabled>取消</button>
+      <button class="btn-ghost" id="btnRecalc">重算</button>
+    </div>
+    <div class="pendingbar" id="pendingBar" role="status" aria-live="polite" hidden>
+      <span id="pendingText"></span>
+      <span class="pend-btns"><button class="btn-ghost amber" id="btnApply">应用并计算</button><button class="btn-ghost" id="btnDiscard">放弃编辑</button></span>
+    </div>
+
+    <article class="wide plotcard">
+      <header class="plothead">
+        <div>
+          <h3>轴上光强 I(r) · O′ 点（数值积分）</h3>
+          <p>滚轮缩放横轴（Shift+滚轮缩放纵轴），拖动平移，双击复位；点击曲线跳到该半径，点击 ▲▼ 极值点跳到极值半径。</p>
+        </div>
+        <div class="tools">
+          <div class="seg seg-sm" id="xAxisSeg" role="group" aria-label="横轴">
+            <button data-v="r" class="on">r (mm)</button><button data-v="r2">r² (mm²)</button><button data-v="nf">N<sub>F</sub></button>
+          </div>
+          <button class="btn-ghost" id="btnResetView">复位视图</button>
+        </div>
+      </header>
+      <canvas id="cMain" class="main-canvas" role="img" aria-label="轴上光强 I(r) 曲线"></canvas>
+      <div class="legendrow">
+        <label class="check"><input type="checkbox" id="chkExt" checked><span class="sw" style="background:var(--amber)"></span>极值标注</label>
+        <label class="check"><input type="checkbox" id="chkExtLabels" checked>标签带显示极值半径（上：极大，下：极小）</label>
+        <label class="check"><input type="checkbox" id="chkR4" checked><span class="sw dash" style="border-color:var(--pink)"></span>C·r⁴ 对照（C 由数值求得）</label>
+        <label class="check"><input type="checkbox" id="chkCheck"><span class="sw dash" style="border-color:var(--green)"></span>解析验算 4sin²(·)（仅验算，非结果）</label>
+        <label class="check"><input type="checkbox" id="chkZones"><span class="sw" style="background:#2b4a68"></span>r⁴ 适用区阴影</label>
+        <span class="legend" id="axisNote">横轴 r：极值在 r 上越来越密（非等间隔）</span>
+      </div>
+    </article>
+
+    <div class="three">
+      <article class="card">
+        <header><h3>小孔区 I ∝ r⁴（双对数）</h3><p>实线：数值 I；虚线：C·r⁴；下图：相对偏差 ε(r) = |I/(C r⁴) − 1|</p></header>
+        <canvas id="cR4" class="c-r4" role="img" aria-label="r⁴ 双对数图"></canvas>
+        <canvas id="cErr" class="c-err" role="img" aria-label="r⁴ 偏差曲线"></canvas>
+        <div class="cardfoot" id="r4Foot">—</div>
+      </article>
+      <article class="card">
+        <header><h3>孔径示意 · 半波带</h3><p>左：孔面正视（+X 向上，+Y 向左，光沿 +z 射出纸面）；右：侧视光程（z 方向大幅压缩）</p></header>
+        <canvas id="cAp" class="c-sq" role="img" aria-label="孔径示意"></canvas>
+        <div class="cardfoot" id="apFoot">—</div>
+      </article>
+      <article class="card">
+        <header><h3>子波怎样叠加 · 相量（振动曲线）</h3><p>复平面上的 U′ = U·e<sup>−ikL</sup>。彩色箭头 = 孔面按等宽环带分成的 M 段，每段内部仍由多个积分节点精确求积</p></header>
+        <canvas id="cPh" class="c-sq" role="img" aria-label="相量叠加"></canvas>
+        <div class="cardfoot" id="phFoot">—</div>
+      </article>
+    </div>
+
+    <article class="wide tablecard">
+      <header class="plothead">
+        <div><h3>极值表（自动检测 + dI/dr = 0 精化）</h3><p>点击任一行跳到该半径。规律：极值处 N<sub>F</sub> = r²/(λL) ≈ n，奇数 n 为极大、偶数 n 为极小；相邻极大 Δ(r²) ≈ 2λL，而 Δr 逐渐减小。</p></div>
+        <div class="tools">
+          <button class="btn-ghost" id="btnExpExt">导出极值 CSV</button>
+        </div>
+      </header>
+      <div class="tablewrap">
+        <table id="extTable">
+          <thead><tr>
+            <th>序号</th><th>类型</th><th>r (mm)</th><th>r² (mm²)</th><th>N<sub>F</sub></th><th>n</th>
+            <th>I/I<sub>inc</sub></th><th>Δr 与上一同类 (μm)</th><th>Δ(r²) 与上一同类 (mm²)</th>
+            <th title="独立验算：光程条件 √(L²+r²) − L = nλ/2 的半径，与数值结果比较">验算 r<sub>n</sub> 差 (nm)</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="cardfoot" id="extFoot">—</div>
+    </article>
+
+    <div class="exportbar">
+      <span class="legend">导出（均含单位、采样、归一化与参数元数据）：</span>
+      <button class="btn-ghost" id="btnPngMain">导出提交图 PNG（主图 · 极值半径）</button>
+      <button class="btn-ghost" id="btnPng">导出全部图像 PNG</button>
+      <button class="btn-ghost" id="btnCsv">导出 I(r) CSV</button>
+      <button class="btn-ghost" id="btnJson">导出参数配置 JSON</button>
+      <label class="btn-ghost filebtn">载入配置 JSON<input type="file" id="fileJson" accept=".json,application/json" hidden></label>
+    </div>
+
+    <section class="details">
+      <details open>
+        <summary>① 题意复述与坐标约定</summary>
+        <div class="columns">
+          <div class="box"><b>题目条件（预设，可一键恢复）</b>
+            <p>标量衍射；λ = 500 nm；衍射屏到观察屏 L = 50 cm；孔面入射振幅均匀 A = 1（实数）。第一问：圆孔内入射场同相（等相位面与孔面重合），半径 r 从 0 增大，数值积分求轴上 O′ 点光强 I(r)；用误差判据界定 I ∝ r⁴ 的范围；覆盖 ≥ 5 个完整振荡周期，自动找出并精化极大、极小；从数值曲线求第 4 个极大半径，作为第二问默认半径。</p></div>
+          <div class="box"><b>坐标</b>
+            <p>光沿 +z 从衍射屏（孔面，z = 0）传到观察屏（z = L）。孔面坐标 (X, Y)，原点在轴上；观察屏坐标 (X′, Y′)，原点 O′ 为轴与观察屏交点。题图把竖直轴标为 X(Y)、X′(Y′)，本项目取 +X、+X′ 向上；X、Y、z 构成右手系，迎着光看（光朝向观察者）时 +Y 向左。第一问只用 O′ = (0, 0)。</p></div>
+          <div class="box"><b>时谐因子与相位符号</b>
+            <p>场写作 Re[U e<sup>−iωt</sup>]，向 +z 传播的平面波为 e<sup>+ikz</sup>，点源球面波为 e<sup>+ikR</sup>/R。因此“相位延迟 φ”表示复振幅乘 e<sup>+iφ</sup>（第二问情形 3 将沿用此约定）。</p></div>
+        </div>
+        <svg class="coordsvg" viewBox="0 0 640 170" role="img" aria-label="坐标示意">
+          <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#93aac2"/></marker>
+          <marker id="arc" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#57dbe8"/></marker></defs>
+          <line x1="40" y1="95" x2="610" y2="95" stroke="#93aac2" marker-end="url(#ar)"/><text x="600" y="115" fill="#93aac2" font-size="13">z（光传播方向）</text>
+          <rect x="150" y="18" width="6" height="56" fill="#3a526d"/><rect x="150" y="116" width="6" height="40" fill="#3a526d"/>
+          <line x1="153" y1="74" x2="153" y2="116" stroke="#57dbe8" stroke-width="3"/>
+          <text x="112" y="14" fill="#93aac2" font-size="12">衍射屏（孔面）</text>
+          <line x1="153" y1="95" x2="153" y2="30" stroke="#57dbe8" marker-end="url(#arc)"/><text x="160" y="40" fill="#57dbe8" font-size="13">+X</text>
+          <text x="162" y="112" fill="#eaf4ff" font-size="12">O</text>
+          <line x1="520" y1="12" x2="520" y2="160" stroke="#3a526d" stroke-width="4"/>
+          <text x="488" y="10" fill="#93aac2" font-size="12">观察屏</text>
+          <line x1="520" y1="95" x2="520" y2="30" stroke="#ee79aa" marker-end="url(#arc)"/><text x="527" y="40" fill="#ee79aa" font-size="13">+X′</text>
+          <text x="528" y="112" fill="#eaf4ff" font-size="12">O′</text>
+          <line x1="153" y1="80" x2="520" y2="95" stroke="#ffc074" stroke-dasharray="4 3"/><text x="300" y="80" fill="#ffc074" font-size="12">R = √(L² + ρ²)</text>
+          <text x="300" y="140" fill="#93aac2" font-size="12">L = 50 cm（示意未按比例）</text>
+          <path d="M40,40 L40,150 M70,40 L70,150 M100,40 L100,150" stroke="#2b4a68"/><text x="40" y="165" fill="#93aac2" font-size="11">平面波 A·e^{ikz}</text>
+        </svg>
+      </details>
+
+      <details>
+        <summary>② 标量衍射积分、传播核、面积权重、单位与归一化</summary>
+        <div class="formula">
+          <b>U(P) = (1/(iλ)) ∬<sub>Σ</sub> U<sub>inc</sub>(Q) · (z/R) · e<sup>ikR</sup>/R · dS，　I(P) = |U(P)|²</b>
+          <span class="note">第一类瑞利–索末菲积分（略去 (1 − 1/(ikR)) 因子，相对影响 ≤ 1/(kL) ≈ 1.6×10⁻⁷）。倾斜因子 z/R 与 1/R 球面波衰减都保留；<b>先把所有面元的复振幅相加，再取模平方</b>。孔面同相仍有传播光程 R 造成的相位差 kR。</span>
+        </div>
+        <div class="formula">
+          <b>O′ 点：U(O′) = (A/(iλ)) ∫₀<sup>r</sup> 2πρ · (L/R) · e<sup>ikR</sup>/R · dρ，　R = √(L² + ρ²)</b>
+          <span class="note">圆对称：环带面积权重 dS = 2πρ dρ。实际求积：把 [0, r] 分成宽度 ≤ h 的面板，每个面板用 n 点 Gauss–Legendre，节点权重 = w<sub>i</sub>·(h/2)·2πρ<sub>i</sub>。相位用 k(R − L) = kρ²/(R + L) 计算，避免 kR ≈ 6.3×10⁶ rad 的大数相减；输出约化场 U′ = U·e<sup>−ikL</sup>，|U′|² = |U|²。</span>
+        </div>
+        <div class="formula">
+          <b>归一化：A = 1，I<sub>inc</sub> = |A|² = 1；图中纵轴 I/I<sub>inc</sub> = |U|²/|A|²</b>
+          <span class="note">用同一积分约定计算“不加遮挡的平面波”在 O′ 的光强 I₀：validate.js 用高斯渐变孔径（w = 10 mm）数值积分得 I₀ = 0.99999937（w = 10 mm；w = 2、5 mm 时分别为 0.99960437、0.99998987，与高斯光束近似验算一致，w → ∞ 时 → 1；见 validation/validation_report.md）。因此 I/I<sub>inc</sub> 与 I/I₀ 相同；极大值接近 4 = (2|A|)²。单位：所有长度内部以米计算，nm / μm / mm / cm 仅在显示与输入处由 <code>Diffraction.UNITS</code> 统一换算；光强以 I<sub>inc</sub> 为单位（无量纲）。</span>
+        </div>
+        <div class="formula">
+          <b>解析式只作独立验算（虚线，默认关闭）</b>
+          <span class="note">近轴/菲涅耳近似下 I/I₀ = 4 sin²[k(√(L²+r²) − L)/2]，小孔首项 (πr²/(λL))²；极值光程条件 √(L²+r²) − L = nλ/2。这些式子<b>从不</b>用于生成曲线、极值、r⁴ 区间或第 4 极大半径，只用于在表格中给出“与数值结果的差”。</span>
+        </div>
+      </details>
+
+      <details>
+        <summary>③ 采样估算与误差（第一问径向积分 + 第二问规划）</summary>
+        <div class="tablewrap"><table id="sampTable"><tbody></tbody></table></div>
+        <p class="small muted">λ/10 判据：相邻源采样点到观察点的光程差 ≤ λ/10（相位差 ≤ 0.2π）。第一问轴上点 dR/dρ = ρ/R，最大在 ρ = r<sub>max</sub> 处；面板宽 h 取 λR<sub>max</sub>/(q·r<sub>max</sub>)，q = 10/20/40 对应预览/标准/高精，面板内再用 Gauss–Legendre 节点，所以实际相邻节点光程差远小于 λ/q。第二问观察区为以 O′ 为中心的 5 mm × 5 mm，边缘与角点的 |∇R| 更大，同时情形 3 的入射相位梯度 8π/(2r) 叠加在传播相位上，规划见表下半部分。</p>
+      </details>
+
+      <details id="convDetails">
+        <summary>④ 收敛检查（网格加密 · 半径采样加密 · 极值位置）</summary>
+        <div class="convbar"><button class="btn-primary inline" id="btnConv">在后台运行收敛检查</button><span class="legend" id="convStatus">基于当前 λ、L、r<sub>max</sub>；参考解：q = 160、16 点 GL。命令行版本见 validate.js。</span></div>
+        <div id="convOut"></div>
+      </details>
+
+      <details>
+        <summary>⑤ 物理分析：为什么小孔 I ∝ r⁴？为什么出现极大极小？</summary>
+        <div class="columns two-col">
+          <div class="box"><b>小孔：I ∝ r⁴</b>
+            <p>当 r 很小，孔内所有点到 O′ 的光程差 ΔR ≈ r²/(2L) ≪ λ/2（即 N<sub>F</sub> ≪ 1），各子波几乎同相，复振幅直接按面积相加：|U| ≈ (1/λ)·πr²/L ∝ r²，于是 I = |U|² ∝ r⁴。本页的 C 由数值积分在 r<sub>s</sub> = 10⁻³√(λL) 处求得，偏差 ε(r) = |I/(Cr⁴) − 1| 随 r 增大而增大；默认 5% 阈值给出适用区约 N<sub>F</sub> ≲ 0.25。超出后边缘子波相位明显落后，相量开始弯曲，I 增长变慢。</p></div>
+          <div class="box"><b>极值：菲涅耳半波带</b>
+            <p>以 O′ 为中心、按 R = L + nλ/2 把孔面划分为半波带。相邻半波带对 O′ 的贡献相位相反、大小几乎相等（倾斜因子和 1/R 缓慢减小）。孔内含奇数个半波带时剩余一个未抵消的带 → 极大（≈ 4I₀）；含偶数个时几乎完全抵消 → 极小（≈ 0）。半波带边界 r<sub>n</sub>² ≈ nλL，所以振荡在 r² 或 N<sub>F</sub> 上近似等间隔（周期 ΔN<sub>F</sub> = 2），在 r 上并<b>不</b>等间隔：Δr ≈ λL/r 逐渐变小。相量图中这就是振动曲线绕圆一周（2 个半波带）回到原点。极大值随 n 缓慢下降（倾斜因子 L/R）。</p></div>
+        </div>
+        <p class="small muted">随机相位单次实现、线性相位使图样偏移、圆屏泊松亮斑与巴比涅原理的分析见「第二问」页签中的可折叠说明。</p>
+      </details>
+    </section>
+  </div>
+
+  <aside class="side" id="side">
+    <h2>实验控制</h2>
+    <div class="control">
+      <label for="rSlider">圆孔半径 r <output id="rOut">—</output></label>
+      <input id="rSlider" type="range" min="0" max="2.2" step="0.0005" value="1.0" aria-label="圆孔半径">
+      <div class="ends"><span>0</span><span id="rEnd">2.2 mm</span></div>
+      <div class="numrow">
+        <input id="rInput" type="number" min="0" step="0.000001" value="1.0" aria-label="精确半径 (mm)"><span class="unit">mm</span>
+        <button class="btn-mini" id="rMinus" title="减小 1 μm">−1μm</button><button class="btn-mini" id="rPlus" title="增大 1 μm">+1μm</button>
+      </div>
+    </div>
+    <section class="scanbox" id="scanBox" aria-label="半径参数扫描">
+      <div class="scanhead"><b>半径参数扫描</b><span class="scanstate" id="scanState">未扫描</span></div>
+      <div class="scanbtns">
+        <button class="btn-mini wide2" id="scanFromZero" title="把 r 置 0，然后让 r 随时间匀速（按 N_F）增大">⟲ 从 0 自动扫描</button>
+        <button class="btn-mini wide2" id="scanToggle" aria-pressed="false">▶ 继续扫描</button>
+        <button class="btn-mini" id="scanBack" title="r 减小一个单步（ΔN_F）">◂ 单步</button>
+        <button class="btn-mini" id="scanFwd" title="r 增大一个单步（ΔN_F）">单步 ▸</button>
+        <button class="btn-mini" id="scanPrev" title="跳到上一个极大或极小">⏮ 上一个极值</button>
+        <button class="btn-mini" id="scanNext" title="跳到下一个极大或极小">下一个极值 ⏭</button>
+      </div>
+      <div class="scanopts">
+        <label>速度 <select id="scanSpeed" aria-label="扫描速度">
+          <option value="0.25">0.25 个半波带/s</option><option value="0.5" selected>0.5 个半波带/s</option><option value="1">1 个半波带/s</option><option value="2">2 个半波带/s</option><option value="8">8 个半波带/s</option></select></label>
+        <label>单步 <select id="scanStepSize" aria-label="单步大小">
+          <option value="0.05">ΔN_F = 0.05</option><option value="0.1" selected>ΔN_F = 0.1</option><option value="0.25">ΔN_F = 0.25</option><option value="0.5">ΔN_F = 0.5</option><option value="1">ΔN_F = 1（一个半波带）</option></select></label>
+      </div>
+      <div class="scaninfo" id="scanInfo">—</div>
+      <div class="hint">动画表示<b>参数 r 随时间增大</b>：每一帧显示的都是该半径下稳态（时间平均）的 I(r)，光强本身并不随时间闪烁。孔径半波带、相量与 I(r) 游标同步。</div>
+    </section>
+
+    <button class="btn-primary" id="btnLock4">锁定第 4 个极大半径</button>
+    <div class="lockinfo" id="lockInfo">等待数值曲线…</div>
+    <button class="btn-secondary" id="btnPreset">恢复题目预设</button>
+
+    <div class="segwrap">
+      <label>计算精度</label>
+      <div class="seg" id="precSeg">
+        <button data-v="preview">预览</button><button data-v="standard" class="on">标准</button><button data-v="high">高精</button>
+      </div>
+      <div class="hint" id="precHint">—</div>
+    </div>
+
+    <div class="control">
+      <label for="thrInput">r⁴ 适用区阈值 ε<sub>max</sub> <output id="thrOut">5.0 %</output></label>
+      <input id="thrSlider" type="range" min="0.2" max="20" step="0.1" value="5">
+      <div class="numrow"><input id="thrInput" type="number" min="0.01" max="50" step="0.01" value="5"><span class="unit">%</span></div>
+    </div>
+
+    <details class="ext" id="extParams">
+      <summary>扩展参数（默认 = 题目预设）</summary>
+      <div class="control">
+        <label for="lamSlider">波长 λ <output id="lamOut">500 nm</output></label>
+        <input id="lamSlider" type="range" min="380" max="780" step="1" value="500">
+        <div class="numrow"><input id="lamInput" type="number" min="100" max="2000" step="0.1" value="500"><span class="unit">nm</span></div>
+      </div>
+      <div class="control">
+        <label for="LSlider">距离 L <output id="LOut">50 cm</output></label>
+        <input id="LSlider" type="range" min="10" max="200" step="0.5" value="50">
+        <div class="numrow"><input id="LInput" type="number" min="1" max="1000" step="0.1" value="50"><span class="unit">cm</span></div>
+      </div>
+      <div class="control">
+        <label for="rMaxInput">半径扫描上限 r<sub>max</sub> <output id="rMaxOut">2.2 mm</output></label>
+        <div class="numrow"><input id="rMaxInput" type="number" min="0.3" max="6" step="0.1" value="2.2"><span class="unit">mm</span></div>
+        <div class="hint">至少需覆盖 5 个完整周期：r<sub>max</sub> ≥ √(11λL)</div>
+      </div>
+      <div class="warn" id="presetWarn" hidden>⚠ 已偏离题目预设：当前结果不是正式题目答案。点“恢复题目预设”还原 λ = 500 nm、L = 50 cm。</div>
+    </details>
+
+    <div class="sideinfo">
+      <div><span>运行模式</span><b id="modeInfo">—</b></div>
+      <div><span>归一化</span><b>I<sub>inc</sub> = |A|² = 1</b></div>
+      <div><span>传播核</span><b>RS1：(z/R)e<sup>ikR</sup>/(iλR)</b></div>
+      <div><span>第二问默认半径</span><b id="q2r">—</b></div>
+    </div>
+  </aside>
+</div>
+
+<!-- ===================== 第二问 ===================== -->
+<div class="workspace" id="q2-panel" hidden>
+  <div class="maincol">
+    <div class="metrics" id="q2metrics">
+      <div class="metric"><small>孔径半径 r（图样所用）</small><strong id="q2mR">—</strong><em id="q2mRs">—</em></div>
+      <div class="metric"><small>轴上 I/I<sub>inc</sub>（直接积分）</small><strong id="q2mI">—</strong><em id="q2mIs">—</em></div>
+      <div class="metric"><small>探针 (X′, Y′) 处 I/I<sub>inc</sub></small><strong id="q2mP">—</strong><em id="q2mPs">—</em></div>
+      <div class="metric hl"><small>第 4 极大 r<sub>4,max</sub> / 情形</small><strong id="q2rBig">—</strong><em id="q2mCase">—</em></div>
+    </div>
+
+    <section class="concept" aria-live="polite">
+      <span class="badge" id="q2cBadge">第二问</span>
+      <h2 id="q2cTitle">四种二维图样</h2>
+      <p id="q2cText">半径默认锁定在第一问数值求得的第 4 个轴上极大。图样由第一类瑞利–索末菲复振幅积分得到，I = |U|²；解析公式只作验算。</p>
+    </section>
+
+    <div class="statusbar" id="q2statusbar">
+      <span class="qbadge" id="q2qBadge">—</span>
+      <span class="qbadge error" id="q2capBadge" hidden>FFT 上限</span>
+      <span class="stag" id="q2sTag">—</span>
+      <div class="progress"><i id="q2progBar"></i></div>
+      <span class="stext" id="q2sText">—</span>
+      <span class="mainwarn warntxt" hidden>⚠ 主线程计算：计算期间页面会停顿</span>
+      <button class="btn-ghost" id="q2btnCancel" disabled>取消</button>
+      <button class="btn-ghost" id="q2btnRecalc">重算</button>
+    </div>
+    <div class="pendingbar" id="q2pendingBar" role="status" aria-live="polite" hidden>
+      <span id="q2pendingText"></span>
+      <span class="pend-btns"><button class="btn-ghost amber" id="q2btnApply">应用并计算</button><button class="btn-ghost" id="q2btnDiscard">放弃编辑</button></span>
+    </div>
+
+    <div class="q2grid">
+      <article class="wide plotcard q2mapcard">
+        <header class="plothead">
+          <div>
+            <h3 id="q2mapTitle">观察屏光强 I(X′, Y′)</h3>
+            <p>点击或拖动设探针（方向键微调）；滚轮缩放、放大后拖动平移、双击复位。两轴等比例，+X′ 向上，迎着光看 +Y′ 向左。</p>
+          </div>
+          <div class="tools q2tools">
+            <div class="seg seg-sm" role="group" aria-label="二维图缩放">
+              <button id="q2zoomIn" title="以探针为中心放大">放大</button><button id="q2zoomOut" title="缩小">缩小</button><button id="q2zoomReset" title="回到整幅 5 mm × 5 mm">复位视图</button>
+            </div>
+            <div class="seg seg-sm" id="q2scaleSeg" role="group" aria-label="色标">
+              <button data-v="linear" class="on">线性</button><button data-v="log">对数</button>
+            </div>
+            <div class="seg seg-sm" id="q2normSeg" role="group" aria-label="归一化">
+              <button data-v="per">本图各自</button><button data-v="shared" class="on">共享</button><button data-v="fixed4">固定 I=4</button>
+            </div>
+          </div>
+        </header>
+        <div class="q2mapwrap">
+          <canvas id="cQ2map" class="q2-map" role="img" tabindex="0" aria-label="二维光强图（可用方向键移动探针，+/− 缩放，0 复位）"></canvas>
+          <canvas id="cQ2bar" class="q2-bar" role="img" aria-label="色标"></canvas>
+        </div>
+        <div class="cardfoot" id="q2mapFoot">—</div>
+      </article>
+      <article class="card q2apcard">
+        <header><h3>孔径振幅 / 相位</h3><p>同一物理入射场；随机相位画的是固定单元格，加密求积不会重抽。</p></header>
+        <canvas id="cQ2ap" class="q2-ap" role="img" aria-label="孔径相位"></canvas>
+        <div class="cardfoot" id="q2apFoot">—</div>
+      </article>
+    </div>
+
+    <div class="q2cuts">
+      <article class="card">
+        <header><h3>X′ 剖面（Y′ = 探针 Y′）</h3><p>纵轴 I/I<sub>inc</sub>（线性）；滚轮缩放、双击复位；虚线为几何预计偏移（情形 3）<button class="btn-mini" id="q2cutReset" style="margin-left:6px">剖面复位</button></p></header>
+        <canvas id="cQ2cutX" class="q2-cut" role="img" aria-label="X′ 光强剖面"></canvas>
+        <div class="cardfoot" id="q2cutXNote">—</div>
+      </article>
+      <article class="card">
+        <header><h3>Y′ 剖面（X′ = 探针 X′）</h3><p>纵轴 I/I<sub>inc</sub>（线性）；滚轮缩放、双击复位</p></header>
+        <canvas id="cQ2cutY" class="q2-cut" role="img" aria-label="Y′ 光强剖面"></canvas>
+        <div class="cardfoot" id="q2cutYNote">—</div>
+      </article>
+    </div>
+
+    <article class="wide plotcard" id="q2compareCard" hidden>
+      <header class="plothead">
+        <div>
+          <h3>同相圆孔 与 同半径圆屏对照（共享色标）</h3>
+          <p>圆屏场在复振幅上按巴比涅：U<sub>disk</sub> = U<sub>free</sub> − U<sub>hole</sub>，不是光强相减。两图共用右侧色条（与主图同步缩放），色条上标出两图 O′ 处的值。</p>
+        </div>
+      </header>
+      <div class="q2cmp">
+        <div><canvas id="cQ2hole" class="q2-cmp" role="img" aria-label="圆孔对照图"></canvas><div class="cardfoot" id="q2holeFoot">同相圆孔</div></div>
+        <div><canvas id="cQ2disk" class="q2-cmp" role="img" aria-label="圆屏对照图"></canvas><div class="cardfoot" id="q2diskFoot">不透明圆屏</div></div>
+        <canvas id="cQ2cmpBar" class="q2-cmpbar" role="img" aria-label="对照共享色标"></canvas>
+      </div>
+      <div class="cardfoot" id="q2cmpFoot">—</div>
+    </article>
+
+    <div class="exportbar">
+      <span class="legend">第二问导出（含单位、采样、种子、情形、归一化、λ、L、r）：</span>
+      <button class="btn-ghost" id="q2btnPng">导出图样 PNG</button>
+      <button class="btn-ghost" id="q2btnCsv">导出 I(X′,Y′) CSV</button>
+      <button class="btn-ghost" id="q2btnJson">导出参数配置 JSON</button>
+      <label class="btn-ghost filebtn">载入配置 JSON<input type="file" id="q2fileJson" accept=".json,application/json" hidden></label>
+    </div>
+
+    <section class="details">
+      <details open>
+        <summary>② 采样方案、权重、误差与抽检（本图实际采用）</summary>
+        <div class="tablewrap"><table id="q2PlanTable"><tbody></tbody></table></div>
+        <p class="small muted" id="q2sampNote">源平面采样与观察面采样分开。源间距由观察区角点光程差 ≤ λ/q 决定；<b>8π 倾斜只约束线性相位情形</b>。FFT 窗口至少盖住 2(W+a)，顶到点数上限时会放宽源间距并在状态栏用红标写出实际达到的 λ/q。二维图样用同一 RS1 核的零填充 FFT 卷积生成。同相 / 线性用极坐标直接积分抽检；随机固定格按单元格积分；逐点独立用与 FFT 相同的源像素求和。不是远场/夫琅禾费近似。</p>
+      </details>
+      <details id="q2anaRandom">
+        <summary>情形 2 · 随机相位（单次实现，不是时间平均）</summary>
+        <div class="box">
+          <p><b>逐点独立（题目预设）</b>：每个源采样点的相位彼此独立、均匀于 [0, 2π)，δ 就等于源间距 d。换预览 / 标准 / 高精会换一套采样点，图样跟着变，<b>没有连续极限</b>。可比的量是平均光强 ≈ N<sub>cell</sub>·(δ²/λL)²，约为同相相干叠加的 1/N。这是一次实现，不是时间平均。</p>
+          <p><b>固定单元格（演示）</b>：相位画在边长固定的正方形上（默认 40 μm）。像素若跨过格边界，按重叠面积对 e<sup>iφ</sup> 加权，不再把整格相位赋给中心落在哪一侧。加密网格只是更密地采样同一块状场，不重抽随机数。种子经 Hash(seed, i<sub>x</sub>, i<sub>y</sub>) 决定，点「重新生成」才换实现。</p>
+        </div>
+      </details>
+      <details id="q2anaLinear">
+        <summary>情形 3 · 沿 X 线性相位 8π：图样朝 +X′ 平移，并不等同于同相</summary>
+        <div class="columns two-col">
+          <div class="box"><b>相位约定</b>
+            <p>孔顶（X = +r）相对孔底（X = −r）<b>延迟 8π</b>：φ(X) = 8π(X + r)/(2r)，φ 为相位延迟，复振幅乘 e<sup>+iφ</sup>（时谐因子 e<sup>−iωt</sup>）。沿 Y 为常数。两端相位模 2π 相同，但孔径上累积了 4 个波长的连续光程梯度，<b>并不</b>因为两端同余就回到同相情形。</p></div>
+          <div class="box"><b>偏移方向</b>
+            <p>φ 随 +X 增大，等效为波矢 k<sub>x</sub> = 4π/r &gt; 0 的倾斜平面波，主瓣应朝 <b>+X′（向上）</b> 平移。几何估计 ΔX′ = L tan(arcsin(2λ/r))。剖面图上的虚线是这一预计位置；数值峰值应落在其附近。偏移方向与“延迟端”一致：波前在孔顶落后，光束偏向延迟的一侧。</p></div>
+        </div>
+        <svg class="coordsvg" viewBox="0 0 560 150" role="img" aria-label="线性相位偏移示意">
+          <defs><marker id="ar2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#57dbe8"/></marker></defs>
+          <text x="16" y="20" fill="#93aac2" font-size="12">孔径（侧视，+X 向上）</text>
+          <line x1="70" y1="30" x2="70" y2="130" stroke="#3a526d" stroke-width="4"/>
+          <text x="80" y="40" fill="#ee79aa" font-size="12">孔顶 延迟 8π</text>
+          <text x="80" y="126" fill="#93aac2" font-size="12">孔底 相位 0</text>
+          <path d="M78,128 L100,36" stroke="#ffc074" stroke-width="2"/>
+          <text x="108" y="80" fill="#ffc074" font-size="11">波前倾斜</text>
+          <line x1="200" y1="80" x2="360" y2="36" stroke="#57dbe8" stroke-dasharray="4 3" marker-end="url(#ar2)"/>
+          <text x="230" y="48" fill="#57dbe8" font-size="12">图样移向 +X′</text>
+          <line x1="400" y1="20" x2="400" y2="140" stroke="#3a526d" stroke-width="3"/>
+          <circle cx="400" cy="40" r="10" fill="none" stroke="#ffc074" stroke-width="2"/>
+          <text x="416" y="44" fill="#ffc074" font-size="12">主瓣</text>
+          <text x="416" y="84" fill="#93aac2" font-size="11">O′</text>
+          <line x1="396" y1="80" x2="404" y2="80" stroke="#93aac2"/>
+        </svg>
+      </details>
+      <details id="q2anaBabinet">
+        <summary>情形 4 · 泊松亮斑与巴比涅原理（复振幅相减）</summary>
+        <div class="columns two-col">
+          <div class="box"><b>圆屏的实现</b>
+            <p>不把积分域换成“孔外的整个无限平面”（那在数值上不稳定），而是用同一传播核、同一归一化：<b>U′<sub>disk</sub> = U′<sub>free</sub> − U′<sub>hole</sub></b>。不加遮挡的平面波在约化约定下 U′<sub>free</sub> = A = 1，I<sub>0</sub> → 1。光强是 |U<sub>disk</sub>|²，<b>不是</b> I<sub>free</sub> − I<sub>hole</sub>。</p></div>
+          <div class="box"><b>轴上泊松亮斑</b>
+            <p>同相圆孔在第 4 极大处 U′<sub>hole</sub> ≈ 2（I ≈ 4），于是 U′<sub>disk</sub> ≈ 1 − 2 = −1，I<sub>disk</sub>(O′) ≈ 1。不透明圆屏的几何阴影中心出现接近 I<sub>0</sub> 的亮斑，这就是泊松亮斑。它与圆孔轴上光强通过巴比涅关系互相决定：I<sub>disk</sub>(O′) = |1 − U′<sub>hole</sub>(O′)|²。</p></div>
+        </div>
+      </details>
+    </section>
+  </div>
+
+  <aside class="side" id="q2side">
+    <h2>第二问控制</h2>
+    <div class="segwrap">
+      <label>四种情形</label>
+      <div class="seg seg-vert" id="q2caseSeg">
+        <button data-v="inphase" class="on">1 · 同相圆孔</button>
+        <button data-v="random">2 · 随机相位（单次）</button>
+        <button data-v="linear">3 · 沿 X 线性相位 8π</button>
+        <button data-v="disk">4 · 不透明圆屏</button>
+      </div>
+    </div>
+
+    <div class="control">
+      <label for="q2rInput">图样半径 r <output id="q2rOut">—</output></label>
+      <div class="numrow">
+        <input id="q2rInput" type="number" min="0" max="2.2" step="0.000001" value="1.0" aria-label="第二问半径 (mm)"><span class="unit">mm</span>
+      </div>
+      <div class="hint" id="q2rHint">默认锁定第 4 个轴上极大。解锁后，图样使用当前已应用的半径（须点「应用并计算」才会重算二维图）。</div>
+    </div>
+    <button class="btn-primary" id="btnLock4Q2">锁定第 4 个极大半径</button>
+    <div class="lockinfo" id="q2lockInfo">—</div>
+
+    <div id="q2randomBox" class="scanbox" hidden>
+      <div class="scanhead"><b>随机相位实现</b></div>
+      <div class="seg seg-sm" id="q2randMode" style="margin:6px 0">
+        <button type="button" data-v="independent" class="on">逐点独立（题目）</button>
+        <button type="button" data-v="cell">固定单元格</button>
+      </div>
+      <div class="hint" id="q2randHint">逐点独立：δ 等于源采样间距，结果随网格改变。</div>
+      <div class="control" style="margin:6px 0">
+        <label for="q2seed">种子 <output id="q2seedOut">20261111</output></label>
+        <div class="numrow"><input id="q2seed" type="number" min="0" max="4294967295" step="1" value="20261111"><span class="unit">整数</span></div>
+      </div>
+      <div class="control">
+        <label for="q2cell">物理单元格边长 <output id="q2cellOut">40 μm</output></label>
+        <div class="numrow"><input id="q2cell" type="number" min="5" max="200" step="1" value="40"><span class="unit">μm</span></div>
+      </div>
+      <button class="btn-secondary" id="q2btnRegen" style="margin-top:4px">重新生成（换种子）</button>
+      <div class="hint">固定单元格时，加密网格或刷新不会重抽相位。逐点独立时，换精度会换采样点，这是模型本身。</div>
+    </div>
+
+    <div class="segwrap">
+      <label>计算精度（第二问）</label>
+      <div class="seg" id="q2precSeg">
+        <button data-v="preview">预览</button><button data-v="standard" class="on">标准</button><button data-v="high">高精</button>
+      </div>
+      <div class="hint" id="q2precHint">—</div>
+    </div>
+
+    <div class="control">
+      <label>探针 X′ / Y′</label>
+      <div class="numrow">
+        <input id="q2px" type="number" step="0.01" value="0" aria-label="探针 X′ (mm)"><span class="unit">mm</span>
+        <input id="q2py" type="number" step="0.01" value="0" aria-label="探针 Y′ (mm)"><span class="unit">mm</span>
+      </div>
+      <button class="btn-mini" id="q2probe0" style="margin-top:6px">回到 O′</button>
+    </div>
+
+    <button class="btn-secondary" id="q2btnPreset">恢复题目预设</button>
+    <div class="sideinfo">
+      <div><span>观察区</span><b>至少 5 mm × 5 mm</b></div>
+      <div><span>归一化</span><b>I<sub>inc</sub> = |A|² = 1</b></div>
+      <div><span>传播核</span><b>RS1，非远场近似</b></div>
+      <div><span>运行模式</span><b id="q2modeInfo">—</b></div>
+    </div>
+  </aside>
+</div>
+
+<footer class="footer">数值内核 diffraction.js · 后台任务 worker.js · 绘图 plot.js · 界面 lab-engine / lab-q1 / lab-q2 / lab-export。所有曲线与数值均由数值积分产生；解析式仅作验算。<span id="footVer"></span></footer>
+</main>
+
+<script src="diffraction.js"></script>
+<script src="diffraction-q2.js"></script>
+<script src="jobs.js"></script>
+<script src="plot.js"></script>
+<script src="lab-engine.js"></script>
+<script src="lab-q1.js"></script>
+<script src="lab-export.js"></script>
+<script src="lab-q2.js"></script>
+<script src="app.js"></script>
+<div class="stamp" id="stamp">build 2026-11-11 · phase 2 · ux</div>
+</body>
+</html>

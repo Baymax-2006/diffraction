@@ -1,0 +1,175 @@
+{
+  "when": "2026-11-11T12:25:33.722Z",
+  "url": "http://127.0.0.1:8766/index.html",
+  "results": {
+    "bug5_混叠": {
+      "preview": {
+        "nr": 800,
+        "maxima": 181,
+        "minima": 181,
+        "ms": 3388
+      },
+      "standard": {
+        "nr": 4000,
+        "maxima": 473,
+        "minima": 473,
+        "ms": 20951
+      },
+      "NFmax": 947.3684210526316,
+      "expectedMaxima": 474,
+      "previewDeltaNF_atRmax": 2.371385284236875
+    },
+    "bug1_旧曲线与新参数混用": {
+      "curveParams_lambda": 500,
+      "stateLambda": 700,
+      "curveI_at_0p5": 3.9999971120409166,
+      "cardI": "3.246977",
+      "cardSrc": "精确：直接积分（标准）",
+      "sTag": "当前结果对应：λ = 500 nm · L = 50 cm · r_max = 2.2 mm · 标准（h = 5.682 μm，GL 8，N_r = 4000）· 任务 #1",
+      "chip": "⚠ 扩展参数 · λ = 700 nm · L = 50 cm",
+      "NF_card": "0.71429"
+    },
+    "bug2_极值标签裁剪": {
+      "clip": {
+        "x0": 58,
+        "x1": 1005,
+        "y0": 16,
+        "y1": 350
+      },
+      "nMarkers": 19,
+      "clippedOrTruncated": 10,
+      "bad": [
+        {
+          "label": "极小1",
+          "X": 362.4,
+          "top": 357,
+          "bot": 368,
+          "l": 348.8,
+          "r": 376
+        },
+        {
+          "label": "极小2",
+          "X": 488.5,
+          "top": 357,
+          "bot": 368,
+          "l": 474.9,
+          "r": 502.1
+        },
+        {
+          "label": "极小3",
+          "X": 585.2,
+          "top": 357,
+          "bot": 368,
+          "l": 571.6,
+          "r": 598.8
+        },
+        {
+          "label": "极小4",
+          "X": 666.8,
+          "top": 357,
+          "bot": 368,
+          "l": 653.2,
+          "r": 680.4
+        },
+        {
+          "label": "极小5",
+          "X": 738.6,
+          "top": 357,
+          "bot": 368,
+          "l": 725,
+          "r": 752.2
+        },
+        {
+          "label": "极小6",
+          "X": 803.6,
+          "top": 357,
+          "bot": 368,
+          "l": 790,
+          "r": 817.2
+        },
+        {
+          "label": "极小7",
+          "X": 863.3,
+          "top": 357,
+          "bot": 368,
+          "l": 849.7,
+          "r": 876.9
+        },
+        {
+          "label": "极小8",
+          "X": 918.9,
+          "top": 357,
+          "bot": 368,
+          "l": 905.3,
+          "r": 932.5
+        },
+        {
+          "label": "极小9",
+          "X": 971.1,
+          "top": 357,
+          "bot": 368,
+          "l": 957.5,
+          "r": 984.7
+        },
+        {
+          "label": "极大10",
+          "X": 996.2,
+          "top": 28.4,
+          "bot": 39.4,
+          "l": 979.5,
+          "r": 1012.9
+        }
+      ],
+      "labelsContainRadius": false
+    },
+    "bug3_rmax0.3_第四极大不存在": {
+      "before": {
+        "lock": "第 4 个极大：r = 1.3228768 mm（任务 #1 的数值曲线检测、Brent 求根精化）。已锁定：参数变化后自动跟随。",
+        "q2r": "1.322877 mm"
+      },
+      "after": {
+        "rMax": 0.3,
+        "maxima": 0,
+        "m4": "未找到",
+        "lock": "第 4 个极大：r = 1.3228768 mm（任务 #1 的数值曲线检测、Brent 求根精化）。已锁定：参数变化后自动跟随。",
+        "q2r": "1.322877 mm",
+        "q2rBig": "1.3228768 mm（任务 #1）",
+        "locked": true,
+        "extFoot": "找到 0 个极大、0 个极小（不计 r = 0）；相邻极大之间 0 个完整周期 < 5，请增大 r_max。相邻极大 Δ(r²) 平均 0.000000 mm²（2λL = 0.500000 mm²），Δr 从 — μm 减到 — μm：在 r 上不等间隔，在 r² 上近似等间隔。精化：离散采样峰与 dI/dr = 0"
+      },
+      "convStatus": "已提交，后台运行中…",
+      "qBadge": "计算出错",
+      "sText": "TypeError: Cannot read properties of undefined (reading 'r')",
+      "consoleErrors": [
+        "error: TypeError: Cannot read properties of undefined (reading 'r')\n    at http://127.0.0.1:8766/diffraction.js:439:22\n    at Array.forEach (<anonymous>)\n    at Object.convergenceStudy (http://127.0.0.1:8766/diffraction.js:432:13)\n    at Object.conv (http://127.0.0.1:8766/jobs.js:41:22)\n    at Objec"
+      ]
+    },
+    "bug4_previewBusy卡死": {
+      "afterFirst": {
+        "lam": 600,
+        "quality": "final",
+        "stale": 1
+      },
+      "secondDrag": {
+        "resultLambda": 600,
+        "resultQuality": "final",
+        "stateLambda": 650,
+        "badge": "精确结果 · 标准"
+      }
+    },
+    "bug6_1080宽度布局": {
+      "sideTop": 3485,
+      "rSliderTop": 3568,
+      "mainPlotTop": 726,
+      "mainPlotBottom": 1116,
+      "pageHeight": 4185,
+      "viewportH": 900,
+      "sideSticky": "static"
+    },
+    "bug7_r0配置往返": {
+      "exported_r_mm": 0,
+      "loaded_r_mm": 1,
+      "rInput": "1.0000000"
+    }
+  }
+}

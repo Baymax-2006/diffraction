@@ -1,0 +1,325 @@
+{
+  "when": "2026-11-12T03:43:49.788Z",
+  "browser": "Chrome headless 156",
+  "url": "http://127.0.0.1:8765/index.html",
+  "checks": [
+    {
+      "group": "基准",
+      "name": "第 4 极大 r ≈ 1.3228768035 mm",
+      "pass": true,
+      "detail": "1.3228768035 mm"
+    },
+    {
+      "group": "基准",
+      "name": "第 4 极大 I/I_inc ≈ 3.999986",
+      "pass": true,
+      "detail": "3.9999860"
+    },
+    {
+      "group": "基准",
+      "name": "5% r⁴ 区边界 ≈ 0.2495438957 mm",
+      "pass": true,
+      "detail": "0.2495438957 mm"
+    },
+    {
+      "group": "基准",
+      "name": "0–2.2 mm：10 个极大、9 个极小",
+      "pass": true,
+      "detail": "10 极大 / 9 极小，N_r = 4000"
+    },
+    {
+      "group": "基准",
+      "name": "Web Worker 模式、题目预设",
+      "pass": true,
+      "detail": "Web Worker 后台线程 / 题目预设 · λ = 500 nm · L = 50 cm"
+    },
+    {
+      "group": "问题2",
+      "name": "默认主图 19 个极值标签全部完整（不裁剪、不截断、不重叠、含半径）",
+      "pass": true,
+      "detail": "{\"n\":19,\"top\":10,\"bottom\":9,\"bad\":[]}"
+    },
+    {
+      "group": "问题2",
+      "name": "PNG 导出中的主图（离屏 1752 px 重排）标签同样完整",
+      "pass": true,
+      "detail": "{\"n\":19,\"top\":10,\"bottom\":9,\"bad\":[]}"
+    },
+    {
+      "group": "问题2",
+      "name": "第 4 极大标签带 ★ 与半径",
+      "pass": true,
+      "detail": "★极大4  1.32288"
+    },
+    {
+      "group": "问题2",
+      "name": "导出提交图 PNG（2×，主图 + 极值半径）",
+      "pass": true,
+      "detail": "{\"w\":3200,\"h\":1352}"
+    },
+    {
+      "group": "问题2",
+      "name": "导出全部图像 PNG（含元数据，长文本自动换行）",
+      "pass": true,
+      "detail": "{\"w\":1800,\"h\":1741}"
+    },
+    {
+      "group": "问题1",
+      "name": "编辑 λ=700 后、完成前：提示条立即显示“计算中/未应用”",
+      "pass": true,
+      "detail": "计算中新参数正在计算；完成前，曲线、当前点、相量、r⁴、极值、说明与导出仍全部对应任务 #1。未应用：λ = 700 nm（已应用 500 nm）"
+    },
+    {
+      "group": "问题1",
+      "name": "取消后设 r=0.5：曲线仍是 λ=500 的已完成结果，卡片 I 也属于同一结果（≈4，不是 3.246977）",
+      "pass": true,
+      "detail": "曲线 I(0.5) = 3.999987，卡片 I = 3.999998，精确：直接积分（标准），N_F = 1.00000"
+    },
+    {
+      "group": "问题1",
+      "name": "游标点 = 卡片光强（同一结果）",
+      "pass": true,
+      "detail": "3.9999980000008337"
+    },
+    {
+      "group": "问题1",
+      "name": "未应用编辑清楚标出（提示条 + 输入框虚线框）",
+      "pass": true,
+      "detail": "未应用以下编辑尚未计算，图形与导出仍对应任务 #1：λ = 700 nm（已应用 500 nm）"
+    },
+    {
+      "group": "问题1",
+      "name": "预设标签/说明/导出按已应用参数（λ=500），未应用编辑单独列出",
+      "pass": true,
+      "detail": "{\"chip\":\"题目预设 · λ = 500 nm · L = 50 cm\",\"cfgLam\":500,\"pend\":{\"lambda_nm\":700}}"
+    },
+    {
+      "group": "问题1",
+      "name": "“应用并计算”后：曲线与卡片同为 λ=700（I(0.5 mm) = 3.246977），提示条消失",
+      "pass": true,
+      "detail": "{\"cardI\":3.246977,\"curveI\":3.24697294756793,\"bar\":false,\"chip\":\"⚠ 扩展参数 · λ = 700 nm · L = 50 cm\"}"
+    },
+    {
+      "group": "问题4",
+      "name": "快速松开后 previewBusy 已清除，下一次拖动仍有预览",
+      "pass": true,
+      "detail": "{\"busyAfterRelease\":false,\"staleDropped\":0,\"nextDragPreview\":true}"
+    },
+    {
+      "group": "问题4",
+      "name": "连续拖动：多次预览刷新，停住后预览追上最后的 λ，忙标志清除",
+      "pass": true,
+      "detail": "{\"previews\":41,\"end\":{\"lam\":680,\"q\":\"preview\",\"busy\":false,\"dirty\":false},\"maxFrame\":25.400000000023283}"
+    },
+    {
+      "group": "问题4",
+      "name": "拖动中取消：忙标志立即清除，再拖动仍有预览",
+      "pass": true,
+      "detail": "{\"c1\":{\"busyBefore\":true,\"busyAfterCancel\":false,\"jobs\":0},\"nextPreview\":true}"
+    },
+    {
+      "group": "问题4",
+      "name": "预览任务失败：显示错误、忙标志清除，下一次拖动恢复预览并清除错误",
+      "pass": true,
+      "detail": "{\"d1\":{\"err\":\"预览计算失败：Error: 模拟计算失败（回归测试注入）\",\"busy\":false,\"badge\":\"计算出错\"},\"nextPreview\":true,\"errAfter\":null}"
+    },
+    {
+      "group": "问题4",
+      "name": "最终任务失败：保留上一完成结果，λ=740 显示为未应用，任务不残留",
+      "pass": true,
+      "detail": "{\"err\":\"计算失败：Error: 模拟计算失败（回归测试注入）\",\"keep\":true,\"lam\":730,\"bar\":true,\"busy\":false}"
+    },
+    {
+      "group": "问题3",
+      "name": "极值不足：不残留旧 r₄ 锁定 / 第二问半径",
+      "pass": true,
+      "detail": "{\"maxima\":0,\"m4\":\"未找到\",\"m4s\":\"r_max = 0.3 mm 内只有 0 个极大（需 ≥ 4）\",\"lock\":\"无法锁定：当前扫描范围 0–0.3 mm 内只找到 0 个极大、0 个极小（任务 #77）。第 4 个极大约在 NF ≈ 7 处，需 rmax ≳ 1.32 mm（估计）。原先锁定的第 4 极大属于旧参数，已失效，锁定已解除。\",\"q2r\":\"—（未求得）\",\"q2rBig\":\"—（极大不足 4 个）\",\"locked\":false,\"lockDisabled\":true,\"extFoot\":\"找到 0 个极大、0 个极小；不足 5 个完整周期，也没有第 4 个极大（任务 #77）。\",\"r\":0.3}"
+    },
+    {
+      "group": "问题3",
+      "name": "极值表与汇总无 NaN / Infinity",
+      "pass": true,
+      "detail": "找到 0 个极大、0 个极小；不足 5 个完整周期，也没有第 4 个极大（任务 #77）。"
+    },
+    {
+      "group": "问题3",
+      "name": "收敛检查在 r_max = 0.3 mm 下正常完成，不抛异常",
+      "pass": true,
+      "detail": "完成（任务 #79，36 ms） · 范围内不足 4 个极大，已按可用极值处理"
+    },
+    {
+      "group": "问题3",
+      "name": "恢复预设后重新锁定第 4 极大",
+      "pass": true,
+      "detail": "{\"r\":1.322876803474044,\"q2r\":\"1.322877 mm\"}"
+    },
+    {
+      "group": "问题7",
+      "name": "导出 r = 0 的配置再载入，r 仍为 0（不再变成 1 mm）",
+      "pass": true,
+      "detail": "{\"r\":0,\"input\":\"0.0000000\",\"slider\":\"0\",\"locked\":false,\"I\":0,\"note\":\"已载入配置 · 曲线+极值用时 2 ms\",\"lam\":500}"
+    },
+    {
+      "group": "问题7",
+      "name": "扩展参数配置往返（λ=600, L=30, r_max=3, r=0, 阈值 1 %, r² 轴, 预览）",
+      "pass": true,
+      "detail": "{\"r\":0,\"thr\":0.01,\"x\":\"r2\",\"prec\":\"preview\",\"rMax\":3}"
+    },
+    {
+      "group": "问题7",
+      "name": "非法字段（λ=0、r=−1）用默认值并提示",
+      "pass": true,
+      "detail": "已载入配置；以下字段非法或缺失，已用默认值：λ = 0，r = -1，q2.seed（缺失），q2.cellSize_um（缺失），q2.probeX_mm（缺失），q2.probeY_mm（缺失） "
+    },
+    {
+      "group": "问题7",
+      "name": "官方预设配置往返（锁定第 4 极大、阈值 5 %）",
+      "pass": true,
+      "detail": "{\"r\":1.322876803474044,\"locked\":true,\"chip\":\"题目预设 · λ = 500 nm · L = 50 cm\",\"thr\":0.05}"
+    },
+    {
+      "group": "扫描",
+      "name": "从 0 自动扫描：r 随时间增大，游标 / 竖线 / 当前点 / 滑块同步",
+      "pass": true,
+      "detail": "{\"playing\":true,\"on\":true,\"r\":0.423281821012904,\"pointR\":0.423281821012904,\"cursorX\":0.423281821012904,\"vline\":0.423281821012904,\"I\":3.25864318057655,\"curveI\":3.25864318057655,\"state\":\"扫描中\",\"info\":\"r = 0.42328 mm，NF = 0.717；扫描进度 19.2 %\",\"slider\":0.4235,\"quality\":\"preview\",\"segs\":12}"
+    },
+    {
+      "group": "扫描",
+      "name": "扫描帧中的光强 = 该 r 下稳态 I(r)（取自数值曲线），不是时间调制",
+      "pass": true,
+      "detail": "I = 3.258643，曲线 I(r) = 3.258643"
+    },
+    {
+      "group": "扫描",
+      "name": "连续 12 帧：r 单调增大，每帧 I 与 I(r) 曲线一致",
+      "pass": true,
+      "detail": "r 0.4282 → 0.4787 mm，max|ΔI| = 0.0e+0"
+    },
+    {
+      "group": "扫描",
+      "name": "暂停：r 不变，精确值补算后光强读数在 1 s 内恒定（无闪烁）",
+      "pass": true,
+      "detail": "{\"r0\":0.5361832709065065,\"r1\":0.5361832709065065,\"vals\":[\"3.782097\"],\"state\":\"已暂停\",\"on\":true,\"btn\":\"▶ 继续扫描\"}"
+    },
+    {
+      "group": "扫描",
+      "name": "单步 ▸ / ◂：N_F 每步 ±0.1，单步后精算",
+      "pass": true,
+      "detail": "{\"n0\":1.1499700000000006,\"n1\":1.2499700000000011,\"n2\":1.0499700000000007,\"q\":\"precise\",\"playing\":false}"
+    },
+    {
+      "group": "扫描",
+      "name": "下一个 / 上一个极值：从 r = 1.05 mm 依次到 极大3 → 极小3 → 再后退两次到 极小2（极值表行同步高亮）",
+      "pass": true,
+      "detail": "{\"a\":\"max3\",\"b\":\"min3\",\"c\":\"min2\",\"info\":\"r = 1.00000 mm，NF = 4.000；扫描进度 45.5 %；正位于极小 2\",\"rowCur\":\"极小 2\",\"q\":\"precise\"}"
+    },
+    {
+      "group": "扫描",
+      "name": "孔径半波带说明、相量合成与游标对应同一 r（N_F ≈ 7，相量箭头和 = U）",
+      "pass": true,
+      "detail": "{\"r\":1.322876803474044,\"NFcard\":\"7.00001\",\"ap\":\"边缘光程差 Redge − L = 1750.00 nm = 7.0000 × (λ/2)；NF = 7.0000。半波带边界按光程条件 R = L + nλ/2 画出，仅为几何示意。\",\"ph\":\"显示 M = 57 段箭头（教学示意），实际积分节点 ≈ 1864 个，并非全部\",\"phSum\":7.325598980303185e-16,\"cursor\":1.322876803474044}"
+    },
+    {
+      "group": "扫描",
+      "name": "扫描到 r_max 自动暂停",
+      "pass": true,
+      "detail": "{\"r\":2.2,\"playing\":false,\"note\":\"r = 2.20000 mm，NF = 19.360；扫描进度 100.0 %已扫描到 r_max\"}"
+    },
+    {
+      "group": "扫描",
+      "name": "手动拖动半径滑块会退出扫描模式（从 r_max 重新播放时先回到 0）",
+      "pass": true,
+      "detail": "{\"was\":true,\"on\":false,\"playing\":false}"
+    },
+    {
+      "group": "问题5",
+      "name": "预览档：按相位约束 N_r，检出 ≈ 473 个极大（原 800 点只有 181）",
+      "pass": true,
+      "detail": "473 极大 / 473 极小，N_r = 7567，ΔN_F = 0.250，每周期 8.0 点，parabolic，23 ms"
+    },
+    {
+      "group": "问题5",
+      "name": "标准档：473 个极大，与预览档一致（相差 ≤ 3）",
+      "pass": true,
+      "detail": "473 极大 / 473 极小，N_r = 37828，ΔN_F = 0.050，brent，用时 0.4 s"
+    },
+    {
+      "group": "问题5",
+      "name": "放大 5.85–6.0 mm：极值标签自动出现且完整",
+      "pass": true,
+      "detail": "{\"n\":47,\"top\":23,\"bottom\":24,\"bad\":[]}"
+    },
+    {
+      "group": "问题5",
+      "name": "λ 拖动预览（381 nm）同样不混叠",
+      "pass": true,
+      "detail": "{\"nmax\":472,\"nr\":7547}"
+    },
+    {
+      "group": "综合",
+      "name": "控制台无未处理错误（注入失败仅记 warning）",
+      "pass": true,
+      "detail": "无"
+    },
+    {
+      "group": "问题6",
+      "name": "1080 px：两栏布局，控制栏 sticky 且在首屏",
+      "pass": true,
+      "detail": "{\"sideTop\":240,\"sticky\":\"sticky\",\"cols\":\"763px 262px\"}"
+    },
+    {
+      "group": "问题6",
+      "name": "1080 px：滚动到主图时半径滑块、数值框、扫描按钮与主图同时可见",
+      "pass": true,
+      "detail": "{\"slider\":{\"top\":88,\"bottom\":104,\"visibleH\":16},\"input\":{\"top\":126,\"bottom\":160,\"visibleH\":34.390625},\"scan\":{\"top\":208,\"bottom\":239,\"visibleH\":30.390625},\"plot\":{\"top\":76,\"bottom\":546,\"visibleH\":470},\"vh\":900}"
+    },
+    {
+      "group": "问题6",
+      "name": "1080 px 下主图极值标签仍完整",
+      "pass": true,
+      "detail": "{\"n\":19,\"top\":10,\"bottom\":9,\"bad\":[]}"
+    },
+    {
+      "group": "问题6",
+      "name": "1080 px：拖动滑块，主图游标即时跟随",
+      "pass": true,
+      "detail": "{\"cursor\":0.9,\"card\":\"0.900000 mm\"}"
+    },
+    {
+      "group": "问题6",
+      "name": "1080 px：滚到孔径/相量图时半径控件仍可见",
+      "pass": true,
+      "detail": "{\"slider\":[88,104],\"ap\":[576,918]}"
+    },
+    {
+      "group": "问题6",
+      "name": "780 px 窄屏：控制栏为 sticky 顶栏，滑块与主图（未被遮挡部分）同时可见",
+      "pass": true,
+      "detail": "{\"slider\":[40,56],\"sideBottom\":400,\"plot\":[534,934],\"plotVisibleUnoccluded\":400}"
+    },
+    {
+      "group": "file://",
+      "name": "file:// 下以内联 Blob Web Worker 运行（不阻塞主线程），基准一致",
+      "pass": true,
+      "detail": "{\"mode\":\"Web Worker 后台线程（file:// 内联 Blob）\",\"r4\":1.322876803474044,\"n\":19}"
+    },
+    {
+      "group": "file://",
+      "name": "主线程回退下：快速松开 / 失败后预览均恢复",
+      "pass": true,
+      "detail": "{\"busyAfterRelease\":false,\"nextPreview\":true,\"failShown\":true,\"busyAfterFail\":false,\"recovered\":true}"
+    },
+    {
+      "group": "file://",
+      "name": "?engine=main：主线程回退模式运行并明确标示，基准一致",
+      "pass": true,
+      "detail": "{\"mode\":\"主线程回退（?engine=main 强制主线程（测试用））\",\"r4\":1.322876803474044,\"n\":19}"
+    },
+    {
+      "group": "file://",
+      "name": "?engine=main 主线程回退下：快速松开 / 失败后预览均恢复",
+      "pass": true,
+      "detail": "{\"busyAfterRelease\":false,\"failShown\":true,\"busyAfterFail\":false,\"recovered\":true}"
+    }
+  ]
+}

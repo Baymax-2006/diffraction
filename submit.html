@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>圆孔衍射 · 精简提交页（第13章研讨题 第1题）</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="submit.css">
+</head>
+<body>
+<script>
+window.__submit = window.__submit || { errors: [], ready: false };
+window.addEventListener('error', function (e) {
+  window.__submit.errors.push(String(e.message || e));
+  var b = document.getElementById('boot');
+  if (b) { b.hidden = false; b.textContent = '页面出错：' + (e.message || e); }
+});
+</script>
+<main class="wrap" id="app" aria-busy="true">
+<header class="hero">
+  <div>
+    <p class="eyebrow">物理光学 · 第13章研讨题 · 第1题 · 精简提交页</p>
+    <h1>圆孔衍射：轴上光强与四种二维图样</h1>
+    <p class="lead">固定 λ = 500 nm、L = 50 cm。轴上曲线用标准档径向积分；四张二维图在圆孔上取子光源，对观察屏每个点把复振幅直接加起来。本页不改参数。</p>
+  </div>
+  <div class="actions">
+    <a class="ghost" href="index.html">完整交互版</a>
+    <button id="btnExport" type="button" disabled>导出图片</button>
+  </div>
+</header>
+<div id="boot" class="boot" role="status">正在用标准精度计算…</div>
+<div class="statusrow">
+  <div id="status">正在启动计算。</div>
+  <div class="bar" aria-hidden="true"><i id="prog"></i></div>
+</div>
+
+<section id="sec-model">
+  <h2>1. 模型与方法</h2>
+  <p>题目预设：波长 λ = 500 nm，衍射屏到观察屏 L = 50 cm，入射振幅 A = 1（实数，孔内均匀）。轴上半径从 0 扫到 2.2 mm。第一问固定为标准档，读 <code>Diffraction.PRECISION.standard</code>：面板光程差 ≤ λ/<span id="pPath">20</span>，Gauss–Legendre <span id="pGl">8</span> 点，半径采样 <span id="pNr">4000</span> 点，只调用 <code>computeQ1</code>。第二问的四张图在圆孔上取子光源，把复振幅直接相加。</p>
+  <div class="formula">
+    <b>U(P) = (1/(iλ)) ∬ A · t · (L/R) · e<sup>ikR</sup>/R &nbsp;dx dy，&nbsp;&nbsp; I = |U|²</b>
+    <span>第一类瑞利–索末菲。t 在透光部分为 1、在不透明部分为 0；R 是面元到观察点的距离，倾斜因子 L/R 和球面波 1/R 都保留。先把各面元的复振幅加起来，再取模平方，不能先对光强做面积平均。略去严格核中的 (1 − 1/(ikR))，相对大小约 1/(kL) = <span id="vKl">…</span>。</span>
+  </div>
+  <p>第二问把这同一个积分写成圆孔上的子光源求和，R 仍然是精确距离，没有旁轴近似：</p>
+  <div class="formula">
+    <b>U(X′,Y′) = (d²/(iλ)) Σ<sub>j</sub> t<sub>j</sub> · L · e<sup>ikR<sub>j</sub></sup> / R<sub>j</sub>²</b>
+    <span>R<sub>j</sub> = √[(X′−x<sub>j</sub>)² + (Y′−y<sub>j</sub>)² + L²]，I = |U|²。子光源是孔内的网格点 (x<sub>j</sub>, y<sub>j</sub>)，每个代表面积 d²；t<sub>j</sub> 是该点的复透过率。观察屏上的一个点，就是把所有子光源的这项加起来，再取模平方。</span>
+  </div>
+  <p>归一化用 I/I<sub>inc</sub> = |U|²/|A|²。A = 1，所以 I<sub>inc</sub> = 1。计算时提出公共相位 e<sup>ikL</sup>，累加约化场 U′ = U e<sup>−ikL</sup>（|U′|² = |U|²），相位写成 k(R − L) = kρ²/(R + L)，避免 kR 的大数相减。时谐因子取 e<sup>−iωt</sup>，相位延迟 φ 表示复振幅乘 e<sup>+iφ</sup>。圆屏用的就是这个 U′。</p>
+  <div class="coords">
+    <svg viewBox="0 0 220 120" role="img" aria-label="坐标示意：光沿 +z，+X 与 +X′ 向上">
+      <line x1="18" y1="78" x2="200" y2="78" stroke="#93aac2" stroke-width="1.2"/>
+      <polygon points="200,78 192,74 192,82" fill="#93aac2"/>
+      <text x="188" y="96" fill="#93aac2" font-size="11">+z</text>
+      <line x1="58" y1="28" x2="58" y2="108" stroke="#3a526d" stroke-width="3"/>
+      <line x1="58" y1="78" x2="58" y2="36" stroke="#57dbe8" stroke-width="1.4"/>
+      <polygon points="58,32 54,42 62,42" fill="#57dbe8"/>
+      <text x="64" y="40" fill="#57dbe8" font-size="11">+X</text>
+      <text x="64" y="92" fill="#eaf4ff" font-size="11">O</text>
+      <line x1="168" y1="22" x2="168" y2="112" stroke="#3a526d" stroke-width="3"/>
+      <line x1="168" y1="78" x2="168" y2="36" stroke="#ee79aa" stroke-width="1.4"/>
+      <polygon points="168,32 164,42 172,42" fill="#ee79aa"/>
+      <text x="174" y="40" fill="#ee79aa" font-size="11">+X′</text>
+      <text x="174" y="92" fill="#eaf4ff" font-size="11">O′</text>
+      <text x="78" y="18" fill="#93aac2" font-size="10">L = 50 cm</text>
+    </svg>
+    <p>光沿 +z，从孔面 z = 0 到观察屏 z = L。孔面坐标 (X, Y)，观察屏 (X′, Y′)，原点在轴上。+X 与 +X′ 向上；(X, Y, z) 是右手系，迎着光看时 +Y、+Y′ 向左。图上的二维图按这个方向画：竖直轴是 X′，水平轴是 Y′，左边是 +Y′。</p>
+  </div>
+  <p>子光源是什么：把圆孔分成边长为 d 的小方块，每块用中心一个点光源代替，复振幅乘上这块的面积 d² 和透过率 t<sub>j</sub>。点只取在孔内，x² + y² ≤ a²，a 是第一问求出的 r₄。同相圆孔 t<sub>j</sub> = 1；沿 X 的线性相位 t<sub>j</sub> = exp(i·8π(x+a)/(2a))；随机相位每个点一个独立的 φ = 2π Hash(种子, m, n)，m、n 是网格下标。</p>
+  <p>d 怎么取：看观察区角点。孔内离这个角点最远的横向距离是 ρ<sub>max</sub> = a + √2·W/2，W = 5 mm 是观察区边长。沿这条最远方向，相邻两个子光源的光程差上界是 (ρ<sub>max</sub>/R)·d，R = √(ρ<sub>max</sub>²+L²)。令上界等于 λ/<span id="p2Path">10</span>，并且把 d 取得尽量大（尽量稀疏）：d = (λ/10)·R/ρ<sub>max</sub>，不再放宽。采样表里的 λ/x 是网格上轴向相邻两点到角点的实际最大 |ΔR|，它比上界小一些，因为最坏方向往往不落在网格轴上。8π 的入射相位写在 t<sub>j</sub> 里，四种图用同一个 d。</p>
+  <p>观察屏上的每个点单独做上面的求和。屏的网格不必和源一样密。视场是以 O′ 为中心的 5 mm × 5 mm。随机相位散斑的特征尺寸大约 λL/(2a) ≈ 94 μm，屏间距要明显小于它，这里取 25 μm，一边 <span id="pNobs">201</span> 个点。源点数 N 和每一张图的加法次数 N×<span class="n-nobs">201</span>² 在采样表里。每次打开页面都重新计算，不使用缓存，也不用事先存好的图。</p>
+  <div class="tablewrap">
+    <table id="sampTable">
+      <thead><tr><th>采样</th><th>判据</th><th>实际间距</th><th>相邻光程或相位</th></tr></thead>
+      <tbody><tr><td colspan="4">计算中…</td></tr></tbody>
+    </table>
+  </div>
+  <p class="small">轴上 O′ 的最不利点在孔边缘，标准档把积分面板的光程差限制在 λ/20，面板内的 Gauss–Legendre 节点更密。二维图的最不利点是观察区角点。不透明圆屏不在孔外取点：圆屏外面是无限大的透光区，有限个子光源盖不住，所以 U′<sub>屏</sub> = 1 − U′<sub>孔</sub>，在复振幅上相减。</p>
+  <h3>网格加密对照</h3>
+  <p>只留一组对照：在标准档已经定位的第 4 个极大附近，把径向求积加密，再解一次 dI/dr = 0。差都相对于最密的一档。</p>
+  <div class="tablewrap">
+    <table id="convTable">
+      <thead><tr><th>求积</th><th>h (μm)</th><th>r₄ (mm)</th><th>I₄</th><th>Δr (nm)</th><th>ΔI</th></tr></thead>
+      <tbody><tr><td colspan="6">计算中…</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="sec-axis">
+  <h2>2. 轴上结果</h2>
+  <div class="metrics">
+    <div class="metric hl"><small>第 4 个极大 r<sub>4,max</sub></small><strong id="mR4">…</strong><em id="mR4s">由 I(r) 精化得到</em></div>
+    <div class="metric hl"><small>该处光强 I₄ / I<sub>inc</sub></small><strong id="mI4">…</strong><em id="mI4s">先叠加复振幅再取模平方</em></div>
+    <div class="metric"><small>5% 判据下的 r⁴ 边界</small><strong id="mR5">…</strong><em>自行选定的近似判据</em></div>
+    <div class="metric"><small>0–2.2 mm 内的极值</small><strong id="mExt">…</strong><em id="mPer">完整振荡周期</em></div>
+  </div>
+  <p>孔变大以后，边缘光程每增加约 λ/2，就多一条半波带，轴上光强随 r² 近似等间隔地起伏。菲涅耳数 N<sub>F</sub> = r²/(λL) 接近奇数时为极大，接近偶数时为极小。0–2.2 mm 覆盖 <span class="n-nmax">…</span> 个极大和 <span class="n-nmin">…</span> 个极小，相邻极大之间有 <span class="n-nper">…</span> 个完整振荡周期。相邻极大的 Δ(r²) 接近 2λL = <span class="n-2ll">…</span> mm²，所以画在 r 轴上时，振荡越往外越密。</p>
+  <article class="plotcard">
+    <header><h3>轴上光强 I(r)</h3><p>横轴覆盖 0–2.2 mm。阴影是按 5% 判据划出的 r⁴ 区，竖线是第 4 个极大。</p></header>
+    <canvas id="cAxial" role="img" aria-label="轴上光强 I(r) 曲线"></canvas>
+  </article>
+  <p>半径很小时，孔内各子波的传播相位几乎相同，复振幅与孔面积成正比，于是 U ∝ r²，I ∝ r⁴。系数 C = I(r<sub>s</sub>)/r<sub>s</sub>⁴ 在 r<sub>s</sub> = 10<sup>−3</sup>√(λL) 处由数值积分得到，下图虚线是 C·r⁴。相对偏差 ε(r) = |I / (C r⁴) − 1|。<strong>5% 是自行选定的 r⁴ 近似判据</strong>，不是题目规定的唯一边界。允许偏差 5% 时，从 r = 0 起 ε 连续不超过 5% 的最大半径为 r ≤ <span class="n-r5full">…</span> mm。</p>
+  <article class="plotcard">
+    <header><h3>小孔区：I 与 C·r⁴</h3><p>实线是数值积分，虚线是 C·r⁴。竖线标在 5% 边界上。</p></header>
+    <canvas id="cR4" role="img" aria-label="小孔区 I 与 r 的四次方对照"></canvas>
+  </article>
+  <article class="tablecard">
+    <header><h3>极值表</h3><p>局部极大、极小先在 I(r) 采样上检出，再在相邻采样之间求 dI/dr = 0。第 4 个极大在表中标出。Δ(r²) 是与上一个同类极值的差。</p></header>
+    <div class="tablewrap">
+      <table id="extTable">
+        <thead><tr><th>序号</th><th>r (mm)</th><th>r² (mm²)</th><th>N<sub>F</sub></th><th>I/I<sub>inc</sub></th><th>Δ(r²) (mm²)</th></tr></thead>
+        <tbody><tr><td colspan="7">计算中…</td></tr></tbody>
+      </table>
+    </div>
+  </article>
+</section>
+
+<section id="sec-maps">
+  <h2>3. 二维结果</h2>
+  <p>四张图的孔径半径都取上面求出的 r₄ = <span class="n-r4">…</span> mm，视场 5 mm × 5 mm，中心在 O′。同相圆孔、线性相位和圆屏共用色标，上限是这三张直接叠加图里的最大光强；随机相位按本图自己的最大值上色。源 N = <span class="n-nsrc">…</span>，d = <span class="n-dsrc">…</span> μm，屏 <span class="n-nobs">…</span>×<span class="n-nobs">…</span>（间距 <span class="n-dobs">…</span> μm），角点实际光程差 <span class="n-path">…</span>。每张图的加法次数约 <span class="n-ops">…</span>。</p>
+  <div class="maps">
+    <article class="mapcard">
+      <h3>同相圆孔</h3>
+      <canvas id="cIn" class="mapcv" role="img" aria-label="同相圆孔二维光强"></canvas>
+      <p>孔内 t<sub>j</sub> = 1。传播光程仍然让子波干涉，屏上是以 O′ 为中心的菲涅耳环。屏中心把全部子光源加起来得到 I/I<sub>inc</sub> = <span class="n-icenter">…</span>，第一问径向积分的 I₄ = <span class="n-i4">…</span>。色标与线性相位、圆屏共用。</p>
+    </article>
+    <article class="mapcard">
+      <h3>随机相位</h3>
+      <canvas id="cRand" class="mapcv" role="img" aria-label="逐点独立随机相位二维光强"></canvas>
+      <p>每个子光源一个独立相位 φ = 2π Hash(种子, m, n)，种子 <span class="n-seed">…</span>，m、n 是源网格下标（x = md，y = nd），间距 d = <span class="n-dsrc">…</span> μm。这是一次实现，不是时间平均，换种子或换 d 都会换图样。色标按本图最大值 I<sub>max</sub> = <span class="n-imax-rand">…</span>，约为同相峰值的 1/<span class="n-inv">…</span>。观察区平均光强是 <span class="n-imean">…</span>，估计值 N(d²/λL)² = <span class="n-imodel">…</span>（N = <span class="n-nsrc">…</span>）。</p>
+    </article>
+    <article class="mapcard">
+      <h3>沿 X 的 8π 线性相位</h3>
+      <canvas id="cLin" class="mapcv" role="img" aria-label="8π 线性相位二维光强"></canvas>
+      <p>t<sub>j</sub> = exp(i·8π(x+a)/(2a))，相位从孔的 −X 端到 +X 端增加 8π，延迟端在 +X。图样应朝 +X′ 移动；图上标出了偏移方向和峰值位置。几何预期 2λL/a = <span class="n-geom">…</span> mm，剖面上的峰值在 X′ = <span class="n-peak">…</span> mm，该处直接叠加 I/I<sub>inc</sub> = <span class="n-ishift">…</span>。O′ 处 I/I<sub>inc</sub> = <span class="n-ilin0">…</span>，不再是极大。</p>
+    </article>
+    <article class="mapcard">
+      <h3>不透明圆屏</h3>
+      <canvas id="cDisk" class="mapcv" role="img" aria-label="不透明圆屏与泊松亮斑"></canvas>
+      <p>同半径不透明圆屏不在孔外另取一批点。圆屏外面是无限大的开放区域，直接取点盖不住。无遮挡平面的约化场是 U′ = 1，所以 <strong>U′<sub>屏</sub> = 1 − U′<sub>孔</sub></strong>。这是复振幅相减，不是光强相减。轴上留下泊松亮斑，I/I<sub>inc</sub> = <span class="n-idisk">…</span>。</p>
+    </article>
+  </div>
+</section>
+
+<section id="sec-end">
+  <h2>4. 结论</h2>
+  <p id="conclusion">计算完成后在这里汇总关键数值。</p>
+  <h3>与已验证参考值的比对</h3>
+  <p class="small">下表左边是本页刚刚算出的数，右边是这份内核在标准精度下已经核对过的参考值。不一致时会标出来。</p>
+  <ul id="checks" class="checks"></ul>
+</section>
+
+<footer id="foot">第一问 diffraction.js · 第二问 direct-q2.js 直接叠加。完整版 index.html 的二维算法保持原样，本页不用。</footer>
+</main>
+<script src="diffraction.js"></script>
+<script src="direct-q2.js"></script>
+<script src="jobs.js"></script>
+<script src="submit.js"></script>
+</body>
+</html>
